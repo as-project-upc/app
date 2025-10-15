@@ -272,3 +272,5 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+*/target
+*/npm_modules
