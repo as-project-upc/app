@@ -6,6 +6,9 @@
 - Npm
 - Angular
 - Rust
+- Axum
+- SQLx
+- Websockets
 
 # Ideas for the app
 
@@ -22,7 +25,7 @@
 
 # Security Features
 
-- User authentication and authorization
+- User authentication and author  ization
 - User roles and permissions
 - Data validation and sanitization
 - Password protection
@@ -30,6 +33,8 @@
 - Content encryption
 - SQL injection prevention
 - Server certificates
+- CSRF protection
+- XSS protection
 
 # Setup
 
@@ -51,4 +56,4 @@
 
 ## Backend
 
-- `cargo run'
+- `cargo run`
