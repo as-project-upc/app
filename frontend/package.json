@@ -7,11 +7,17 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "precommit": "lint-staged"
+    "pretty": "npx prettier 'src/**/*.ts' --write"
   },
   "prettier": {
     "printWidth": 100,
     "singleQuote": true,
+    "useTabs": false,
+    "tabWidth": 2,
+    "semi": true,
+    "bracketSpacing": true,
+    "trailingComma": "es5",
+    "arrowParens": "avoid",
     "overrides": [
       {
         "files": "*.html",
@@ -19,12 +25,6 @@
           "parser": "angular"
         }
       }
-    ]
-  },
-  "lint-staged": {
-    "*.js": [
-      "prettier --write",
-      "git add"
     ]
   },
   "private": true,
@@ -45,12 +45,10 @@
     "@angular/cli": "^20.3.5",
     "@angular/compiler-cli": "^20.3.4",
     "@types/jasmine": "^5.1.10",
-    "husky": "^9.1.7",
     "jasmine-core": "~5.12.0",
     "karma": "~6.4.4",
     "karma-chrome-launcher": "~3.2.0",
     "karma-jasmine": "~5.1.0",
-    "lint-staged": "^16.2.4",
     "prettier": "^3.6.2",
     "typescript": "~5.9.3"
   }
