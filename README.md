@@ -41,3 +41,14 @@
     - Download https://www.msys2.org/ and install
     - Open `C:\msys64\ucrt64.exe` and run `pacman -S mingw-w64-ucrt-x86_64-toolchain`
     - `rustup default stable-x86_64-pc-windows-gnu`
+
+# Run the app
+
+## Frontend
+
+- `npm install`
+- `npm start`
+
+## Backend
+
+- `cargo run'
