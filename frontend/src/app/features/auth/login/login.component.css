@@ -1,0 +1,84 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #e0f2fe;
+}
+
+  .card {
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+  }
+
+ .logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.logo-image {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  margin-bottom: 16px;
+}
+
+
+  .logo h2 {
+    font-size: 25px;
+    font-family: 'Nunito', sans-serif;
+    margin: 0;
+  }
+
+  .logo p {
+    color: rgb(105, 102, 102);
+    font-size: 15px;
+    margin-top: 8px;
+    font-family: 'Nunito', sans-serif;
+  }
+
+
+  form .form-group { margin-bottom: 20px; }
+  form .form-group label { display: block; margin-bottom: 8px; font-weight: 400;font-family: 'Nunito', sans-serif; }
+  form .form-group input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+  }
+
+  .demo-info {
+    font-size: 15px;
+    color: gray;
+    margin-bottom: 20px;
+  }
+
+  .demo-info p {
+    margin: 4px 0;
+  }
+
+  button {
+    width: 100%;
+    padding: 12px;
+    background-color: #05b1f1  ;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  button:hover {
+    background-color: #4b7cef;
+  }
+  
