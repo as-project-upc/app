@@ -25,7 +25,7 @@
 
 # Security Features
 
-- User authentication and author  ization
+- User authentication and authorization
 - User roles and permissions
 - Data validation and sanitization
 - Password protection
@@ -57,3 +57,18 @@
 ## Backend
 
 - `cargo run`
+
+## Implemented Features
+
+- User authentication with OPAQUE
+    - Registration
+    - Login
+- Roles and permissions
+    - Admin and user role
+- JWT stateless authentication
+
+## References
+
+https://github.com/serenity-kit/opaque
+https://github.com/facebook/opaque-ke/
+https://opaque-auth.com/
