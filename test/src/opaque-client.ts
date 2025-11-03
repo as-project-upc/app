@@ -123,7 +123,7 @@ export class Client {
     });
     
     if (!finishResult) {
-      throw new Error("Login failed: client.finishLogin returned null. This can happen if the server was restarted between login/start and login/finish, or if the password is incorrect.");
+      throw new Error("Login failed: client.finishLogin returned null. ");
     }
     
     const finishResponse = await fetch(`${this.baseUrl}/login/finish`, {
