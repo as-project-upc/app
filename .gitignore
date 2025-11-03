@@ -274,3 +274,5 @@ dist
 
 */target
 */npm_modules
+/backend/auth.db
+/backend/opaque.bin
