@@ -3,7 +3,7 @@ import {Client} from './opaque-client';
 async function main() {
   const client = new Client('http://localhost:3000');
   
-  const userNumber = 11111;
+  const userNumber = 11321111;
   const username = `user_${userNumber}`;
   const email = `${userNumber}@a.a`;
   const password = '1234';
@@ -13,7 +13,7 @@ async function main() {
       username,
       email,
       password,
-      'user'
+      'admin'
     );
     console.log(JSON.stringify(registerResponse, null, 2));
   } catch (e) {
@@ -42,6 +42,16 @@ async function main() {
   
   {
     const res = await fetch("http://localhost:3000/admin", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    })
+    const res2Json = await res.json();
+    
+    console.log(JSON.stringify(res2Json, null, 2));
+  }
+  {
+    const res = await fetch("http://localhost:3000/user", {
       headers: {
         Authorization: `Bearer ${token}`,
       }

@@ -69,6 +69,6 @@
 
 ## References
 
-https://github.com/serenity-kit/opaque
-https://github.com/facebook/opaque-ke/
-https://opaque-auth.com/
+- https://github.com/serenity-kit/opaque
+- https://github.com/facebook/opaque-ke/
+- https://opaque-auth.com/
