@@ -1,8 +1,7 @@
-use crate::domain::error::ApiError;
 use crate::domain::result::ApiResult;
 use crate::domain::user::Role;
 use crate::utils::Claims;
-use axum::{extract::Request, response::Json};
+use axum::{response::Json, Extension};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -17,13 +16,7 @@ impl AdminDashboardResponse {
     }
 }
 
-pub async fn handler(req: Request) -> ApiResult<AdminDashboardResponse> {
-    let claims = req
-        .extensions()
-        .get::<Claims>()
-        .ok_or_else(|| ApiError::Unauthorized)?
-        .clone();
-
+pub async fn handler(Extension(claims): Extension<Claims>) -> ApiResult<AdminDashboardResponse> {
     Ok(Json(AdminDashboardResponse::new(
         claims.username,
         claims.role,

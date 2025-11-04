@@ -9,6 +9,7 @@ async function main() {
   const password = '1234';
   
   try {
+    console.log("register")
     const registerResponse = await client.register(
       username,
       email,
@@ -23,12 +24,15 @@ async function main() {
   let token
   
   {
+    console.log("login")
     const res = await client.login(username, password);
     console.log(JSON.stringify(res, null, 2));
     token = res.token;
   }
   
   {
+    console.log("me endpoint")
+    
     const res = await fetch("http://localhost:3000/me", {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -41,6 +45,8 @@ async function main() {
   
   
   {
+    console.log("admin endpoint")
+    
     const res = await fetch("http://localhost:3000/admin", {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -51,6 +57,7 @@ async function main() {
     console.log(JSON.stringify(res2Json, null, 2));
   }
   {
+    console.log("user endpoint")
     const res = await fetch("http://localhost:3000/user", {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -60,6 +67,39 @@ async function main() {
     
     console.log(JSON.stringify(res2Json, null, 2));
   }
+  
+  {
+    console.log("upload")
+    const body = new Uint8Array([0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64]); // "Hello World" in bytes
+    
+    const res = await fetch("http://localhost:3000/locker", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/octet-stream",
+      },
+      body: body
+    });
+    const uploadResult = await res.json();
+    
+    console.log(JSON.stringify(uploadResult, null, 2));
+  }
+  {
+    console.log("download")
+    const res = await fetch("http://localhost:3000/locker", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    });
+    
+    const data = await res.arrayBuffer();
+    const bytes = new Uint8Array(data);
+    
+    console.log(Array.from(bytes));
+    console.log(new TextDecoder().decode(bytes));
+  }
+  
   console.log('OK!!')
 }
 

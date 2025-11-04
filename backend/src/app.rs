@@ -38,6 +38,8 @@ impl App {
 
         let protected_routes = Router::new()
             .route("/me", get(controllers::me::handler))
+            .route("/locker", post(controllers::locker::upload_handler))
+            .route("/locker", get(controllers::locker::download_handler))
             .layer(middleware::from_fn(auth_middleware));
 
         let user_routes = Router::new()

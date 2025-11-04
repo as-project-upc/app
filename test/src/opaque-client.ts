@@ -32,19 +32,13 @@ export interface LoginFinishRequest {
 }
 
 export interface LoginResponse {
-  success: boolean;
-  message: string;
-  user: {
-    id: number;
-    username: string;
-    email: string;
-  };
   token: string;
 }
 
 export class Client {
   baseUrl: string;
   initialized: Promise<void>;
+  loginResult?: client.FinishLoginResult;
   
   constructor(baseUrl: string) {
     this.baseUrl = baseUrl;
@@ -125,6 +119,8 @@ export class Client {
     if (!finishResult) {
       throw new Error("Login failed: client.finishLogin returned null. ");
     }
+    
+    this.loginResult = finishResult;
     
     const finishResponse = await fetch(`${this.baseUrl}/login/finish`, {
       method: "POST",
