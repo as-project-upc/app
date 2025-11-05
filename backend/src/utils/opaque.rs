@@ -1,13 +1,15 @@
+use crate::repository::server_data::ServerDataRepository;
 use opaque_ke::CipherSuite;
 use opaque_ke::{ServerLogin, ServerSetup};
 use rand::rngs::OsRng;
+use sqlx::SqlitePool;
 use std::collections::HashMap;
-use std::fs;
-use std::path::Path;
 use std::sync::{Arc, Mutex};
 
 #[derive(Clone, Copy, Debug)]
 pub struct DefaultCipherSuite;
+
+type Server = ServerSetup<DefaultCipherSuite>;
 
 impl CipherSuite for DefaultCipherSuite {
     type OprfCs = opaque_ke::Ristretto255;
@@ -18,28 +20,28 @@ impl CipherSuite for DefaultCipherSuite {
 
 #[derive(Clone)]
 pub struct OpaqueServer {
-    pub server_setup: ServerSetup<DefaultCipherSuite>,
+    pub server_setup: Server,
     pub login_state_cache: Arc<Mutex<HashMap<String, ServerLogin<DefaultCipherSuite>>>>,
 }
 
 impl OpaqueServer {
-    pub fn new(path: &str) -> Self {
-        if Path::new(path).exists() {
-            let bytes = fs::read(path).expect("Failed to read server setup file");
-            Self {
-                server_setup: ServerSetup::<DefaultCipherSuite>::deserialize(&bytes)
-                    .expect("Failed to deserialize server setup"),
-                login_state_cache: Arc::new(Mutex::new(HashMap::new())),
+    pub async fn new(pool: SqlitePool) -> Self {
+        let repo = ServerDataRepository::new(pool);
+
+        let server = match repo.get_opaque_key().await {
+            Ok(bytes) => Server::deserialize(&bytes).unwrap(),
+            Err(_) => {
+                let server = Server::new(&mut OsRng);
+                repo.set_opaque_key(server.serialize().to_vec())
+                    .await
+                    .unwrap();
+                server
             }
-        } else {
-            let mut rng = OsRng;
-            let opaque_server = Self {
-                server_setup: ServerSetup::<DefaultCipherSuite>::new(&mut rng),
-                login_state_cache: Arc::new(Mutex::new(HashMap::new())),
-            };
-            let serialized = opaque_server.server_setup.serialize();
-            fs::write(path, serialized).expect("Failed to write server setup file");
-            opaque_server
+        };
+
+        Self {
+            server_setup: server,
+            login_state_cache: Arc::new(Mutex::new(HashMap::new())),
         }
     }
 }
