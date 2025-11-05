@@ -29,12 +29,11 @@ pub async fn register_finish_handler(
     if request.username.is_empty() || request.email.is_empty() {
         return Err(ApiError::MissingField {
             field: "username or email".to_string(),
-        }
-        .into());
+        });
     }
 
     if !request.email.contains('@') {
-        return Err(ApiError::InvalidEmail.into());
+        return Err(ApiError::InvalidEmail);
     }
 
     let user_repo = UserRepository::new(pool.clone());
@@ -62,10 +61,10 @@ pub async fn register_finish_handler(
         }
         Err(e) => {
             if e.to_string().contains("UNIQUE") {
-                Err(ApiError::EmailExists.into())
+                Err(ApiError::EmailExists)
             } else {
                 tracing::error!("Database error: {:?}", e);
-                Err(ApiError::DatabaseError.into())
+                Err(ApiError::DatabaseError)
             }
         }
     }

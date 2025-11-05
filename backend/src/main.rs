@@ -3,6 +3,7 @@ use std::str::FromStr;
 mod app;
 mod controllers;
 mod domain;
+mod middlewares;
 mod repository;
 mod utils;
 
@@ -11,6 +12,7 @@ async fn main() {
     dotenvy::dotenv().expect("Failed to read .env file");
 
     tracing_subscriber::fmt()
+        .with_max_level(tracing::Level::TRACE)
         .with_target(false)
         .with_level(true)
         .with_line_number(true)

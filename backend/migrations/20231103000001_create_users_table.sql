@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS users
 (
-    id            INTEGER PRIMARY KEY AUTOINCREMENT,
+    id            TEXT     NOT NULL PRIMARY KEY,
     username      TEXT     NOT NULL UNIQUE,
     password_file BLOB     NOT NULL,
     email         TEXT     NOT NULL UNIQUE,
@@ -10,5 +10,6 @@ CREATE TABLE IF NOT EXISTS users
 );
 
 CREATE INDEX IF NOT EXISTS idx_users_username ON users (username);
+CREATE INDEX IF NOT EXISTS idx_users_id ON users (id);
 CREATE INDEX IF NOT EXISTS idx_users_email ON users (email);
 CREATE INDEX IF NOT EXISTS idx_users_role ON users (role);

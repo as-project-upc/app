@@ -20,11 +20,12 @@ impl UserRepository {
     ) -> Result<User, sqlx::Error> {
         let user = sqlx::query_as::<_, User>(
             r#"
-            INSERT INTO users (username, password_file, email, role)
-            VALUES (?, ?, ?, ?)
+            INSERT INTO users (id,username, password_file, email, role)
+            VALUES (?,?, ?, ?, ?)
             RETURNING id, username, password_file, email, role
             "#,
         )
+        .bind(&uuid::Uuid::now_v7().to_string())
         .bind(&username)
         .bind(&password_file)
         .bind(&email)

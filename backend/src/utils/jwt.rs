@@ -20,14 +20,14 @@ fn get_jwt_secret() -> String {
 }
 
 impl Claims {
-    pub fn new(user_id: i32, username: String, email: String, role: Role) -> Self {
+    pub fn new(user_id: String, username: String, email: String, role: Role) -> Self {
         let now = SystemTime::now()
             .duration_since(UNIX_EPOCH)
             .expect("Time went backwards")
             .as_secs();
 
         Self {
-            sub: user_id.to_string(),
+            sub: user_id,
             username,
             email,
             role,
@@ -38,7 +38,7 @@ impl Claims {
 }
 
 pub fn generate_token(
-    user_id: i32,
+    user_id: String,
     username: String,
     email: String,
     role: Role,

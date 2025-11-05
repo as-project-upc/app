@@ -1,4 +1,4 @@
-use crate::domain::error::{ApiError, ErrorResponse};
+use crate::domain::error::ApiError;
 use crate::utils::jwt;
 use axum::{
     extract::Request,
@@ -7,7 +7,7 @@ use axum::{
     response::{IntoResponse, Response},
 };
 
-pub async fn auth_middleware(mut req: Request, next: Next) -> Result<Response, impl IntoResponse> {
+pub async fn auth_middleware(mut req: Request, next: Next) -> Response {
     let auth_header = req
         .headers()
         .get(header::AUTHORIZATION)
@@ -15,28 +15,20 @@ pub async fn auth_middleware(mut req: Request, next: Next) -> Result<Response, i
 
     let auth_header = match auth_header {
         Some(header) => header,
-        None => {
-            let error: (axum::http::StatusCode, axum::Json<ErrorResponse>) =
-                ApiError::Unauthorized.into();
-            return Err(error);
-        }
+        None => return ApiError::Unauthorized.into_response(),
     };
 
     let token = match auth_header.strip_prefix("Bearer ") {
         Some(t) => t,
-        None => {
-            return Err(ApiError::TokenInvalid.into());
-        }
+        None => return ApiError::TokenInvalid.into_response(),
     };
 
     let claims = match jwt::validate_token(token) {
         Ok(c) => c,
-        Err(_) => {
-            return Err(ApiError::TokenInvalid.into());
-        }
+        Err(_) => return ApiError::TokenInvalid.into_response(),
     };
 
     req.extensions_mut().insert(claims);
 
-    Ok(next.run(req).await)
+    next.run(req).await
 }

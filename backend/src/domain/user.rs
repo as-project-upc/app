@@ -20,17 +20,14 @@ impl fmt::Display for Role {
 
 impl From<String> for Role {
     fn from(s: String) -> Self {
-        match s.to_lowercase().as_str() {
-            "admin" => Role::Admin,
-            _ => Role::User,
-        }
+        Role::from(s.to_lowercase().as_str())
     }
 }
 
 impl From<&str> for Role {
     fn from(s: &str) -> Self {
-        match s.to_lowercase() {
-            s if s == "admin" => Role::Admin,
+        match s {
+            "admin" => Role::Admin,
             _ => Role::User,
         }
     }
@@ -44,7 +41,7 @@ impl From<Role> for String {
 
 #[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
 pub struct User {
-    pub id: i32,
+    pub id: String,
     pub username: String,
     #[serde(skip_serializing)]
     pub password_file: Vec<u8>,
@@ -63,7 +60,7 @@ impl<'r> sqlx::FromRow<'r, sqlx::sqlite::SqliteRow> for User {
             username: row.try_get("username")?,
             password_file: row.try_get("password_file")?,
             email: row.try_get("email")?,
-            role: Role::from(role_str),
+            role: Role::from(role_str.as_str()),
         })
     }
 }
