@@ -13,3 +13,12 @@ CREATE INDEX IF NOT EXISTS idx_users_username ON users (username);
 CREATE INDEX IF NOT EXISTS idx_users_id ON users (id);
 CREATE INDEX IF NOT EXISTS idx_users_email ON users (email);
 CREATE INDEX IF NOT EXISTS idx_users_role ON users (role);
+
+
+
+CREATE TABLE IF NOT EXISTS server_data
+(
+    id   TEXT NOT NULL PRIMARY KEY,
+    data BLOB NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_infrastructure_id ON server_data (id);

@@ -15,6 +15,8 @@ pub struct App {}
 
 impl App {
     pub async fn serve(pool: sqlx::SqlitePool) {
+        let opaque_server = OpaqueServer::new(pool.clone()).await;
+
         let public_routes = Router::new()
             .route(
                 "/register/start",
@@ -32,9 +34,7 @@ impl App {
                 "/login/finish",
                 post(controllers::login::login_finish_handler),
             )
-            .route_layer(Extension(Arc::new(OpaqueServer::new(
-                &std::env::var("OPAQUE_SERVER_KEY").expect("Failed to get OPAQUE_SERVER_KEY"),
-            ))));
+            .route_layer(Extension(Arc::new(opaque_server)));
 
         let protected_routes = Router::new()
             .route("/me", get(controllers::me::handler))
