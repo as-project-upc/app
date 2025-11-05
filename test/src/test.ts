@@ -33,7 +33,7 @@ async function main() {
   {
     console.log("me endpoint")
     
-    const res = await fetch("http://localhost:3000/me", {
+    const res = await fetch("http://localhost:3000/api/me", {
       headers: {
         Authorization: `Bearer ${token}`,
       }
@@ -47,7 +47,7 @@ async function main() {
   {
     console.log("admin endpoint")
     
-    const res = await fetch("http://localhost:3000/admin", {
+    const res = await fetch("http://localhost:3000/api/admin", {
       headers: {
         Authorization: `Bearer ${token}`,
       }
@@ -58,7 +58,7 @@ async function main() {
   }
   {
     console.log("user endpoint")
-    const res = await fetch("http://localhost:3000/user", {
+    const res = await fetch("http://localhost:3000/api/user", {
       headers: {
         Authorization: `Bearer ${token}`,
       }
@@ -72,7 +72,7 @@ async function main() {
     console.log("upload")
     const body = new Uint8Array([0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64]); // "Hello World" in bytes
     
-    const res = await fetch("http://localhost:3000/locker", {
+    const res = await fetch("http://localhost:3000/api/locker", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -86,7 +86,7 @@ async function main() {
   }
   {
     console.log("download")
-    const res = await fetch("http://localhost:3000/locker", {
+    const res = await fetch("http://localhost:3000/api/locker", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,

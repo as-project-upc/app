@@ -1,3 +1,5 @@
+use axum::response::{IntoResponse, Response};
+use axum::Json;
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
@@ -46,6 +48,9 @@ pub enum ApiError {
     #[error("User not found")]
     UserNotFound,
 
+    #[error("File not found")]
+    FileNotFound,
+
     #[error("Internal server error")]
     InternalError,
 
@@ -80,7 +85,7 @@ impl ApiError {
 
             ApiError::UsernameExists | ApiError::EmailExists => StatusCode::CONFLICT,
 
-            ApiError::UserNotFound => StatusCode::NOT_FOUND,
+            ApiError::UserNotFound | ApiError::FileNotFound => StatusCode::NOT_FOUND,
 
             ApiError::DatabaseError
             | ApiError::InternalError
@@ -91,40 +96,20 @@ impl ApiError {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct ErrorResponse {
-    pub success: bool,
+struct ErrorResponse {
     pub message: String,
     pub error: ApiError,
 }
 
-impl ErrorResponse {
-    pub fn new(error: ApiError) -> Self {
-        Self {
-            success: false,
-            message: error.message(),
-            error,
-        }
-    }
-
-    pub fn from_message(message: impl Into<String>) -> Self {
-        Self {
-            success: false,
-            message: message.into(),
-            error: ApiError::InternalError,
-        }
-    }
-}
-
-impl From<ApiError> for ErrorResponse {
-    fn from(error: ApiError) -> Self {
-        ErrorResponse::new(error)
-    }
-}
-
-impl From<ApiError> for (axum::http::StatusCode, axum::Json<ErrorResponse>) {
-    fn from(error: ApiError) -> Self {
-        let status = error.status_code();
-        let response = ErrorResponse::new(error);
-        (status, axum::Json(response))
+impl IntoResponse for ApiError {
+    fn into_response(self) -> Response {
+        (
+            self.status_code(),
+            Json(ErrorResponse {
+                message: self.message(),
+                error: self,
+            }),
+        )
+            .into_response()
     }
 }

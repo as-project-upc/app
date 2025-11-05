@@ -2,7 +2,8 @@ use crate::domain::error::ApiError;
 use crate::domain::result::ApiResult;
 use crate::repository::user::UserRepository;
 use crate::utils::base64_serde;
-use crate::utils::{jwt, opaque};
+use crate::utils::jwt;
+use crate::utils::opaque;
 use axum::extract::State;
 use axum::{Extension, Json};
 use opaque_ke::CredentialFinalization;
@@ -42,7 +43,8 @@ pub async fn login_finish_handler(
 
     let _session_key = server_login_state
         .finish(credential_finalization, Default::default())
-        .map_err(|_| ApiError::InvalidCredentials)?;
+        .map_err(|_| ApiError::InvalidCredentials)?
+        .session_key;
 
     let user_repo = UserRepository::new(pool.clone());
     let user = user_repo

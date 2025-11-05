@@ -1,13 +1,14 @@
-use std::sync::Arc;
-use axum::{Extension, Json};
-use axum::extract::State;
-use opaque_ke::{RegistrationRequest, ServerRegistration};
-use serde::{Deserialize, Serialize};
-use sqlx::SqlitePool;
 use crate::domain::error::ApiError;
 use crate::domain::result::ApiResult;
 use crate::repository::user::UserRepository;
-use crate::utils::{base64_serde, opaque};
+use crate::utils::base64_serde;
+use crate::utils::opaque;
+use axum::extract::State;
+use axum::{Extension, Json};
+use opaque_ke::{RegistrationRequest, ServerRegistration};
+use serde::{Deserialize, Serialize};
+use sqlx::SqlitePool;
+use std::sync::Arc;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct RegistrationStartRequest {
@@ -32,25 +33,25 @@ pub async fn register_start_handler(
 
     match user_repo.get_by_username(&request.username).await {
         Ok(Some(_)) => {
-            return Err(ApiError::UsernameExists.into());
+            return Err(ApiError::UsernameExists);
         }
         Ok(None) => {}
         Err(_) => {
-            return Err(ApiError::DatabaseError.into());
+            return Err(ApiError::DatabaseError);
         }
     }
 
     let registration_request = RegistrationRequest::<opaque::DefaultCipherSuite>::deserialize(
         &request.registration_request,
     )
-        .map_err(|_| ApiError::AuthenticationFailed)?;
+    .map_err(|_| ApiError::AuthenticationFailed)?;
 
     let registration_response = ServerRegistration::<opaque::DefaultCipherSuite>::start(
         &opaque_setup.server_setup,
         registration_request,
         &[],
     )
-        .map_err(|_| ApiError::AuthenticationFailed)?;
+    .map_err(|_| ApiError::AuthenticationFailed)?;
 
     let registration_response_bytes = registration_response.message.serialize().to_vec();
 

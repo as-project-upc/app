@@ -1,11 +1,14 @@
 use crate::controllers;
-use crate::utils::{auth_middleware, opaque::OpaqueServer, require_admin, require_user};
+use crate::utils::opaque::OpaqueServer;
+use crate::utils::{auth_middleware, require_admin, require_user};
+use axum::http::header::AUTHORIZATION;
+use axum::http::HeaderValue;
 use axum::routing::{get, post};
 use axum::{middleware, Extension, Router};
 use std::sync::Arc;
 use tokio::signal;
-use tower_http::trace::{DefaultMakeSpan, DefaultOnResponse, TraceLayer};
-use tower_http::LatencyUnit;
+use tower_http::cors::CorsLayer;
+use tower_http::trace::{DefaultMakeSpan, DefaultOnRequest, DefaultOnResponse, TraceLayer};
 use tracing::Level;
 
 pub struct App {}
@@ -29,46 +32,58 @@ impl App {
                 "/login/finish",
                 post(controllers::login::login_finish_handler),
             )
-            .layer(Extension(Arc::new(OpaqueServer::new(
-                std::env::var("OPAQUE_SERVER_KEY")
-                    .expect("Failed to get OPAQUE_SERVER_KEY")
-                    .as_str(),
-            ))))
-            .with_state(pool.clone());
+            .route_layer(Extension(Arc::new(OpaqueServer::new(
+                &std::env::var("OPAQUE_SERVER_KEY").expect("Failed to get OPAQUE_SERVER_KEY"),
+            ))));
 
         let protected_routes = Router::new()
             .route("/me", get(controllers::me::handler))
             .route("/locker", post(controllers::locker::upload_handler))
             .route("/locker", get(controllers::locker::download_handler))
-            .layer(middleware::from_fn(auth_middleware));
+            .route_layer(middleware::from_fn(auth_middleware));
 
         let user_routes = Router::new()
             .route("/user", get(controllers::user::handler))
-            .layer(middleware::from_fn(require_user))
-            .layer(middleware::from_fn(auth_middleware));
+            .route_layer(middleware::from_fn(require_user))
+            .route_layer(middleware::from_fn(auth_middleware));
 
         let admin_routes = Router::new()
             .route("/admin", get(controllers::admin::handler))
-            .layer(middleware::from_fn(require_admin))
-            .layer(middleware::from_fn(auth_middleware));
+            .route_layer(middleware::from_fn(require_admin))
+            .route_layer(middleware::from_fn(auth_middleware));
 
-        let app = public_routes
+        let api_routes = Router::new()
+            .merge(public_routes)
             .merge(protected_routes)
             .merge(user_routes)
-            .merge(admin_routes)
+            .merge(admin_routes);
+
+        let app = Router::new()
+            .nest("/api", api_routes)
+            .fallback(controllers::static_files::handler)
+            .layer(
+                CorsLayer::permissive()
+                    .allow_origin(
+                        std::env::var("FRONTEND_URL")
+                            .expect("Failed to get FRONTEND_URL")
+                            .parse::<HeaderValue>()
+                            .expect("Failed to parse FRONTEND_URL as HeaderValue"),
+                    )
+                    .allow_headers([AUTHORIZATION])
+                    .allow_credentials(false),
+            )
             .layer(
                 TraceLayer::new_for_http()
                     .make_span_with(DefaultMakeSpan::new().level(Level::INFO))
-                    .on_response(
-                        DefaultOnResponse::new()
-                            .level(Level::INFO)
-                            .latency_unit(LatencyUnit::Millis),
-                    ),
-            );
+                    .on_response(DefaultOnResponse::new().level(Level::TRACE))
+                    .on_request(DefaultOnRequest::new().level(Level::TRACE)),
+            )
+            .with_state(pool.clone());
 
         let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
 
         tracing::info!("Server running on http://localhost:3000");
+        tracing::info!("Frontend dev server available at http://localhost:3000/dev/");
 
         axum::serve(listener, app)
             .with_graceful_shutdown(shutdown_signal())

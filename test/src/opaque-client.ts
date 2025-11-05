@@ -50,7 +50,7 @@ export class Client {
     
     const {clientRegistrationState, registrationRequest} = client.startRegistration({password});
     
-    const startResponse = await fetch(`${this.baseUrl}/register/start`, {
+    const startResponse = await fetch(`${this.baseUrl}/api/register/start`, {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
@@ -72,7 +72,7 @@ export class Client {
       password,
     });
     
-    const finishResponse = await fetch(`${this.baseUrl}/register/finish`, {
+    const finishResponse = await fetch(`${this.baseUrl}/api/register/finish`, {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
@@ -95,7 +95,7 @@ export class Client {
     
     const {clientLoginState, startLoginRequest} = client.startLogin({password});
     
-    const startResponse = await fetch(`${this.baseUrl}/login/start`, {
+    const startResponse = await fetch(`${this.baseUrl}/api/login/start`, {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
@@ -122,7 +122,7 @@ export class Client {
     
     this.loginResult = finishResult;
     
-    const finishResponse = await fetch(`${this.baseUrl}/login/finish`, {
+    const finishResponse = await fetch(`${this.baseUrl}/api/login/finish`, {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
