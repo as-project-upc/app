@@ -37,6 +37,8 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatTreeModule} from '@angular/material/tree';
 import {OverlayModule} from '@angular/cdk/overlay';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 const DragConfig = {
@@ -47,6 +49,8 @@ const DragConfig = {
 
 @NgModule({
   exports: [
+    CommonModule,
+    ReactiveFormsModule,
     DragDropModule,
     MatAutocompleteModule,
     MatBadgeModule,
