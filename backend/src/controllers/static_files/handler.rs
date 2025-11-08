@@ -20,7 +20,9 @@ pub async fn handler(uri: Uri) -> Response {
 
     match FileResponse::from_assets(path) {
         Some(file) => file.into_response(),
-        None => ApiError::FileNotFound.into_response(),
+        None => FileResponse::from_assets("index.html")
+            .ok_or_else(|| ApiError::FileNotFound)
+            .into_response(),
     }
 }
 

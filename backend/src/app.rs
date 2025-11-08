@@ -1,11 +1,15 @@
 use crate::controllers;
 use crate::utils::opaque::OpaqueServer;
 use crate::utils::{auth_middleware, require_admin, require_user};
+use axum::handler::Handler;
 use axum::http::header::AUTHORIZATION;
 use axum::http::HeaderValue;
 use axum::routing::{delete, get, post};
 use axum::{middleware, Extension, Router};
+use axum_server::tls_rustls::RustlsConfig;
+use std::net::SocketAddr;
 use std::sync::Arc;
+use std::time::Duration;
 use tokio::signal;
 use tower_http::cors::CorsLayer;
 use tower_http::trace::{DefaultMakeSpan, DefaultOnRequest, DefaultOnResponse, TraceLayer};
@@ -38,9 +42,18 @@ impl App {
 
         let protected_routes = Router::new()
             .route("/me", get(controllers::me::handler))
-            .route("/locker/{file_name}", post(controllers::locker::upload_handler))
-            .route("/locker/{file_name}", delete(controllers::locker::delete_handler))
-            .route("/locker/{file_name}", get(controllers::locker::download_handler))
+            .route(
+                "/locker/{file_name}",
+                post(controllers::locker::upload_handler),
+            )
+            .route(
+                "/locker/{file_name}",
+                delete(controllers::locker::delete_handler),
+            )
+            .route(
+                "/locker/{file_name}",
+                get(controllers::locker::download_handler),
+            )
             .route("/locker", get(controllers::locker::list_handler))
             .route_layer(middleware::from_fn(auth_middleware));
 
@@ -82,18 +95,43 @@ impl App {
             )
             .with_state(pool.clone());
 
-        let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
-
-        tracing::info!("Server running on http://localhost:3000");
-        tracing::info!("Frontend dev server available at http://localhost:3000/dev/");
-
-        axum::serve(listener, app)
-            .with_graceful_shutdown(shutdown_signal())
-            .await
-            .unwrap();
-
-        pool.close().await;
+        start_http(app).await;
+        // start_https(app).await;
     }
+}
+
+async fn start_http(app: Router) {
+    tracing::info!("Server running on http://localhost:3000");
+    axum::serve(
+        tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap(),
+        app,
+    )
+    .with_graceful_shutdown(shutdown_signal())
+    .await
+    .unwrap();
+}
+
+async fn start_https(app: Router) {
+    tracing::info!("Server running on https://localhost:3000");
+    let handle = axum_server::Handle::new();
+    tokio::spawn({
+        let handle = handle.clone();
+        async move {
+            shutdown_signal().await;
+            handle.graceful_shutdown(Some(Duration::from_secs(30)));
+        }
+    });
+
+    axum_server::bind_rustls(
+        SocketAddr::from(([0, 0, 0, 0], 3000)),
+        RustlsConfig::from_pem_file("cert.pem", "key.pem")
+            .await
+            .expect("Failed to load certificates"),
+    )
+    .handle(handle)
+    .serve(app.into_make_service())
+    .await
+    .unwrap();
 }
 
 async fn shutdown_signal() {
