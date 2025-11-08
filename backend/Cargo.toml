@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-axum = "0.8.6"
+axum = { version = "0.8.6", features = ["multipart"] }
 serde = { version = "1.0.228", features = ["derive"] }
 uuid = { version = "1.18.1", features = ["v7"] }
 sqlx = { version = "0.8.6", features = ["runtime-tokio-rustls", "sqlite", "macros", "migrate", "uuid"] }
@@ -21,3 +21,4 @@ thiserror = "2.0.17"
 dotenvy = "0.15.7"
 rust-embed = "8.9.0"
 mime_guess = "2.0.5"
+tokio-stream = "0.1.17"

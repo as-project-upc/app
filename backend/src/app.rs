@@ -3,7 +3,7 @@ use crate::utils::opaque::OpaqueServer;
 use crate::utils::{auth_middleware, require_admin, require_user};
 use axum::http::header::AUTHORIZATION;
 use axum::http::HeaderValue;
-use axum::routing::{get, post};
+use axum::routing::{delete, get, post};
 use axum::{middleware, Extension, Router};
 use std::sync::Arc;
 use tokio::signal;
@@ -38,8 +38,10 @@ impl App {
 
         let protected_routes = Router::new()
             .route("/me", get(controllers::me::handler))
-            .route("/locker", post(controllers::locker::upload_handler))
-            .route("/locker", get(controllers::locker::download_handler))
+            .route("/locker/{file_name}", post(controllers::locker::upload_handler))
+            .route("/locker/{file_name}", delete(controllers::locker::delete_handler))
+            .route("/locker/{file_name}", get(controllers::locker::download_handler))
+            .route("/locker", get(controllers::locker::list_handler))
             .route_layer(middleware::from_fn(auth_middleware));
 
         let user_routes = Router::new()

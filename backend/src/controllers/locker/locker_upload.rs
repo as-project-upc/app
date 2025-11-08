@@ -1,9 +1,11 @@
+use crate::controllers::locker::utils::validate_non_existing_path;
 use crate::domain::error::ApiError;
 use crate::domain::result::ApiResult;
 use crate::utils::Claims;
-use axum::{body::Bytes, response::Json, Extension};
+use axum::body::Bytes;
+use axum::extract::Multipart;
+use axum::{response::Json, Extension};
 use serde::{Deserialize, Serialize};
-use std::path::PathBuf;
 use tokio::fs;
 use tokio::io::AsyncWriteExt;
 
@@ -13,21 +15,14 @@ pub struct UploadResponse {
 }
 
 pub async fn upload_handler(
+    axum::extract::Path(file_name): axum::extract::Path<String>,
     Extension(claims): Extension<Claims>,
-    body: Bytes,
+    multipart: Multipart,
 ) -> ApiResult<UploadResponse> {
-    if body.is_empty() {
-        return Err(ApiError::MissingField {
-            field: "body".to_string(),
-        });
-    }
+    let body = validate_multipart(multipart).await?;
+    let file_path = validate_non_existing_path(claims, &file_name, body.len()).await?;
+    validate_encryption_header(&body)?;
 
-    let storage_dir = PathBuf::from("storage").join(&claims.username);
-    if let Err(_) = fs::create_dir_all(&storage_dir).await {
-        return Err(ApiError::InternalError);
-    }
-
-    let file_path = storage_dir.join(&"upload.dat");
     match fs::File::create(&file_path).await {
         Ok(mut file) => {
             if let Err(_) = file.write_all(&body).await {
@@ -42,4 +37,41 @@ pub async fn upload_handler(
     let size = body.len();
 
     Ok(Json(UploadResponse { size }))
+}
+
+async fn validate_multipart(mut multipart: Multipart) -> Result<Bytes, ApiError> {
+    let mut file_data = None;
+
+    while let Some(field) = multipart.next_field().await.unwrap() {
+        let name = field.name().unwrap().to_string();
+
+        if name == "file" {
+            file_data = Some(field.bytes().await.unwrap());
+        }
+    }
+
+    let body = file_data.ok_or(ApiError::MissingField {
+        field: "file".to_string(),
+    })?;
+
+    if body.is_empty() {
+        return Err(ApiError::MissingField {
+            field: "body".to_string(),
+        });
+    }
+
+    Ok(body)
+}
+
+fn validate_encryption_header(data: &[u8]) -> Result<(), ApiError> {
+    const HEADER: [u8; 4] = [0x45, 0x4E, 0x43, 0x52];
+
+    if data.len() < HEADER.len() || &data[0..HEADER.len()] != &HEADER {
+        return Err(ApiError::ValidationError {
+            field: "file".to_string(),
+            message: "File must be encrypted".to_string(),
+        });
+    }
+
+    Ok(())
 }

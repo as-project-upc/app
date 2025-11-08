@@ -1,3 +1,4 @@
+use crate::controllers::locker::utils::validate_existing_path;
 use crate::domain::error::ApiError;
 use crate::utils::Claims;
 use axum::{
@@ -5,19 +6,13 @@ use axum::{
     response::{IntoResponse, Response},
     Extension,
 };
-use std::path::PathBuf;
 use tokio::fs;
 
-pub async fn download_handler(Extension(claims): Extension<Claims>) -> Result<Response, ApiError> {
-    let storage_dir = PathBuf::from("storage").join(&claims.username);
-    let file_path = storage_dir.join("upload.dat");
-
-    if !file_path.exists() {
-        return Err(ApiError::ValidationError {
-            field: "file".to_string(),
-            message: "No file found".to_string(),
-        });
-    }
+pub async fn download_handler(
+    Extension(claims): Extension<Claims>,
+    axum::extract::Path(file_name): axum::extract::Path<String>,
+) -> Result<Response, ApiError> {
+    let file_path = validate_existing_path(claims, &file_name)?;
 
     match fs::read(&file_path).await {
         Ok(data) => {
