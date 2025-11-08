@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AngularMaterialModule } from '../../ang-material.module';
-import {client, ready} from "@serenity-kit/opaque";
-import { AuthService } from '../../api/auth/auth.service';
-import { RegistrationStartRequest } from '../../api/auth/auth.model';
 import { Router } from '@angular/router';
+import { OpaqueService } from '../services/opaque.service';
 
 
 @Component({
@@ -20,10 +18,11 @@ export class RegisterComponent implements OnInit {
   submitted = false;
   registrationSuccess = false;
   registrationError: string | null = null;
+  token: any;
 
   constructor(private formBuilder: FormBuilder,
-    private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private opaqueService: OpaqueService
   ) {}
 
   ngOnInit(): void {
@@ -34,7 +33,7 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  onSubmit() {
+  async onSubmit() {
     this.submitted = true;
     this.registrationError = null;
     this.registrationSuccess = false;
@@ -44,28 +43,26 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
-    const username = this.registerForm.get('username')?.value || '';
-    const email = this.registerForm.get('email')?.value || '';
-    const password = this.registerForm.get('password')?.value || '';
-
-    const {clientRegistrationState, registrationRequest} = client.startRegistration({password});
-
-
-    const request = new RegistrationStartRequest(
-      username,
-      email,
-      registrationRequest
-    );
-
-    this.authService.register(request).subscribe({
-      next: (data) => {
-        if(data){
-          this.router.navigate(['login'])
-        }
-      },
-      error: (err) => {
-        console.error('Error:', err);
-      },
-    });
+    const username = this.registerForm.get('username')?.value;
+    const email = this.registerForm.get('email')?.value;
+    const password = this.registerForm.get('password')?.value;
+    try {
+      const regRes =  this.opaqueService.register(
+        username,
+        email,
+        password,
+        'admin'
+      );
+      console.log('Registered:', regRes);
+      this.router.navigate(['login'])
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  username(username: any, password: any) {
+    throw new Error('Method not implemented.');
+  }
+  password(username: any, password: any) {
+    throw new Error('Method not implemented.');
   }
 }
