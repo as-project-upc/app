@@ -56,7 +56,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
       if (loginRes.token) {
         localStorage.setItem('authToken', loginRes.token);
-        this.router.navigate(['dashboard'])
+        this.router.navigate(['/dashboard'])
       } else {
         this.isAuthFailed = true;
         this.errorMessage = 'Invalid response from server.';
