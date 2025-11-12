@@ -3,13 +3,15 @@ import { LayoutComponent } from './layout/layout.component';
 import { AuthGuard } from './guards/auth.guard';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { Home } from './home/home';
+import { Dashboard } from './dashboard/dashboard';
 
 
 export const routes: Routes = [
   // Public route
   { path: 'login', component: LoginComponent  },
   { path: 'register', component: RegisterComponent },
+  { path: 'home', component: Home },
 
   { path: '', redirectTo: 'login', pathMatch: 'full' },
 
@@ -19,7 +21,7 @@ export const routes: Routes = [
     component: LayoutComponent,
     canActivate: [AuthGuard],
     children: [
-      { path: 'dashboard', component: DashboardComponent },
+      { path: 'dashboard', component: Dashboard },
     ]
   },
 
