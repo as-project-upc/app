@@ -1,23 +1,48 @@
 <div class="container">
-  <div class="card">
-    <div class="logo">
+    <div class="card">
+        <h1 class="main-heading">Join Us!</h1>
+        <p class="sub-heading">Start your journey in making a difference in pets' lives.</p>
 
-      <h2>GuardPaw</h2>
+        <form [formGroup]="loginForm" class="app-signup__form">
+            <div class="form-group">
+                <label for="email-input">Username </label>
+                <input formControlName="username"  type="username" placeholder="username">
+            </div>
+
+            <div class="form-group">
+                <label for="password-input">Password</label>
+                <div class="password-input-container">
+                    <input formControlName="password" id="password-input" type="password" placeholder="••••••••" class="valid-input">
+                    <!-- <span class="password-toggle">
+                    </span> -->
+                </div>
+
+                <!-- <div class="password-requirements">
+                    <p class="requirement valid">
+                        <span class="check-icon">✓</span> Minimum of 8 characters
+                    </p>
+                    <p class="requirement valid">
+                        <span class="check-icon">✓</span> Uppercase, lowercase letters, and one number
+                    </p>
+                </div> -->
+            </div>
+
+            <!-- <div class="terms-checkbox">
+                <input type="checkbox" id="terms" checked>
+                <label for="terms">I agree to the <a href="#" class="link">**Terms**</a> and <a href="#" class="link">**Privacy Policy**</a>.</label>
+            </div> -->
+
+            <button type="submit" class="create-account-btn" (click)="onLogin()">Login</button>
+        </form>
+
+        <div class="or-divider">
+            <hr>
+            <span>Or</span>
+            <hr>
+        </div>
+
+        <p class="login-link">
+            Doesn't have an account? <a href="register" class="link">Create Account</a>
+        </p>
     </div>
-
-    <form [formGroup]="loginForm" method="post" (ngSubmit)="onLogin()" class="ppl-login__form">
-      <div class="form-group">
-        <label>Username</label>
-        <input formControlName="username" type="username" placeholder="name@domain.com">
-      </div>
-
-      <div class="form-group">
-        <label>Password</label>
-        <input formControlName="password" type="password" placeholder="pass••••••••">
-      </div>
-
-
-      <button type="submit">Sign in</button>
-    </form>
-  </div>
 </div>

@@ -1,84 +1,189 @@
 .container {
   display: flex;
-  align-items: center;
   justify-content: center;
-  height: 100vh;
-  background-color: #e0f2fe;
-}
-
-  .card {
-    background: #ffffff;
-    padding: 40px;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
-  }
-
- .logo {
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  margin-bottom: 30px;
+  min-height: 100vh;
+  background-color: #f8f9fc;
+}
+
+/* Login Card */
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 2.5rem;
+  width: 380px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Headings */
+.main-heading {
   text-align: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #000;
+  margin-bottom: 8px;
 }
 
-.logo-image {
-  width: 90px;
-  height: 90px;
-  object-fit: contain;
-  margin-bottom: 16px;
+.sub-heading {
+  text-align: center;
+  font-size: 0.95rem;
+  color: #666;
+  margin-bottom: 30px;
 }
 
+/* Form */
+.form-group {
+  margin-bottom: 20px;
+}
 
-  .logo h2 {
-    font-size: 25px;
-    font-family: 'Nunito', sans-serif;
-    margin: 0;
-  }
+label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 5px;
+}
 
-  .logo p {
-    color: rgb(105, 102, 102);
-    font-size: 15px;
-    margin-top: 8px;
-    font-family: 'Nunito', sans-serif;
-  }
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="username"] {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+  outline: none;
+}
 
+.form-group input:focus {
+  border-color: #4a4dff;
+}
 
-  form .form-group { margin-bottom: 20px; }
-  form .form-group label { display: block; margin-bottom: 8px; font-weight: 400;font-family: 'Nunito', sans-serif; }
-  form .form-group input {
-    width: 100%;
-    padding: 10px 14px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 15px;
-  }
+/* Password Container */
+.password-input-container {
+  position: relative;
+}
 
-  .demo-info {
-    font-size: 15px;
-    color: gray;
-    margin-bottom: 20px;
-  }
+.password-input-container .valid-input {
+  border-color: #4CAF50;
+  padding-right: 40px;
+}
 
-  .demo-info p {
-    margin: 4px 0;
-  }
+.password-toggle {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #4CAF50;
+  cursor: pointer;
+  font-size: 16px;
+}
 
-  button {
-    width: 100%;
-    padding: 12px;
-    background-color: #05b1f1  ;
-    color: white;
-    font-weight: bold;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
+/* Password Requirements */
+.password-requirements {
+  margin-top: 8px;
+  padding-left: 5px;
+}
 
-  button:hover {
-    background-color: #4b7cef;
-  }
-  
+.requirement {
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+  margin-bottom: 4px;
+  color: #4CAF50;
+}
+
+.requirement .check-icon {
+  margin-right: 5px;
+  font-weight: bold;
+}
+
+/* Terms & Privacy */
+.terms-checkbox {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+  font-size: 0.9rem;
+  flex-wrap: wrap;
+}
+
+.terms-checkbox input[type="checkbox"] {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #4a4dff;
+  border-radius: 4px;
+  margin-right: 10px;
+  display: grid;
+  place-content: center;
+  cursor: pointer;
+  background-color: #fff;
+}
+
+.terms-checkbox input[type="checkbox"]:checked {
+  background-color: #4a4dff;
+  border-color: #4a4dff;
+}
+
+.terms-checkbox input[type="checkbox"]:checked::before {
+  content: "✓";
+  font-size: 14px;
+  color: white;
+}
+
+.link {
+  color: #4a4dff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* Button */
+.create-account-btn {
+  width: 100%;
+  padding: 15px;
+  background-color: #4a4dff;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-bottom: 25px;
+}
+
+.create-account-btn:hover {
+  background-color: #3b3ed9;
+}
+
+/* Divider */
+.or-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.or-divider hr {
+  flex-grow: 1;
+  border: none;
+  border-top: 1px solid #ccc;
+}
+
+.or-divider span {
+  padding: 0 15px;
+  font-size: 0.9rem;
+  color: #666;
+  text-transform: uppercase;
+}
+
+/* Login Link */
+.login-link {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+/* Responsive Layouts */
