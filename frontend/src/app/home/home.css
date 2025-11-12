@@ -1,0 +1,247 @@
+.topbar {
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  height: 70px;
+  display: flex;
+  align-items: center;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+
+.logo {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.auth-links {
+  display: flex;
+  gap: 20px;
+}
+
+.auth-links a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.auth-links a:hover {
+  color: #009688;
+}
+
+/* Hero Section */
+.hero {
+  background: url('../../assets/images/dog.jpg') center/cover no-repeat;
+  height: 75vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-top: 70px; /* offset for fixed navbar */
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.hero .overlay {
+  position: relative;
+  color: #fff;
+  text-align: center;
+  z-index: 1;
+  padding: 2rem;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+/* Sections */
+section {
+  padding: 60px 0;
+  text-align: center;
+  background: #fff;
+  margin: 40px auto;
+  max-width: 1200px;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+
+section h2 {
+  text-align: center;
+  color: #00836c;
+  margin-bottom: 30px;
+}
+
+/* Facilities */
+.facilities p {
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto 40px;
+  color: #666;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.gallery img, .team-grid img {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Equipment */
+.equipment-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+}
+
+.equipment .item {
+  background: #f6f8fb;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+  width: 280px;
+}
+
+.equipment .item:hover {
+  transform: translateY(-5px);
+}
+
+.equipment h3 {
+  color: #00836c;
+  margin-top: 10px;
+}
+
+/* Team */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+}
+
+.member {
+  background: #f6f8fb;
+  border-radius: 10px;
+  text-align: center;
+  padding: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.member h3 {
+  color: #00836c;
+  margin-top: 10px;
+}
+
+/* CTA */
+.cta {
+  background: #00836c;
+  color: #fff;
+  text-align: center;
+  padding: 70px 10%;
+  border-radius: 12px;
+}
+
+.cta .btn {
+  display: inline-block;
+  background: #fff;
+  color: #00836c;
+  padding: 12px 25px;
+  border-radius: 25px;
+  text-decoration: none;
+  margin-top: 20px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.cta .btn:hover {
+  background: #e8f5f2;
+}
+
+/* Footer */
+.footer {
+  background: #1f1f1f;
+  color: #ccc;
+  padding: 60px 10%;
+}
+
+.footer-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  justify-content: space-between;
+}
+
+.footer-grid h3 {
+  color: #fff;
+}
+
+.footer a {
+  color: #ccc;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  color: #00836c;
+}
+
+.footer .copy {
+  text-align: center;
+  margin-top: 30px;
+  font-size: 14px;
+  border-top: 1px solid #333;
+  padding-top: 15px;
+  color: #888;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero {
+    height: 60vh;
+  }
+
+  section {
+    padding: 40px 6%;
+  }
+
+  .equipment .item {
+    width: 100%;
+  }
+
+  .gallery {
+    grid-template-columns: 1fr 1fr;
+  }
+}
