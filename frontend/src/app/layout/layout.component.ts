@@ -2,13 +2,13 @@ import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { DashboardComponent } from "../dashboard/dashboard.component";
 import { Sidebar } from "../sidebar/sidebar";
+import { Dashboard } from '../dashboard/dashboard';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, DashboardComponent, Sidebar],
+  imports: [RouterOutlet, CommonModule, Dashboard, Sidebar],
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.css'],
 })
