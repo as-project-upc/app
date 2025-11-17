@@ -47,6 +47,8 @@ export class PetsAdd {
       reader.readAsDataURL(this.selectedFile);
     }
   }
+
+
   async savePet() {
     if (this.petForm.invalid) return;
 
@@ -61,13 +63,13 @@ export class PetsAdd {
 
     existingPets.pets ??= [];
 
-    // ✅ Use pet count for ID
     const petCount = existingPets.pets.length;
 
     let imageLockerId = '';
     if (this.selectedFile) {
       const lockerId = 'pet' + petCount; // use count instead of Date.now()
-      await this.lockerService.uploadEncryptedFileBlob(this.selectedFile, lockerId);
+      await this.lockerService.deleteFile('pet1');
+      await this.lockerService.uploadFile(this.selectedFile, lockerId);
       imageLockerId = lockerId;
     }
 
@@ -91,7 +93,6 @@ export class PetsAdd {
       appointments: []
     };
 
-    // Delete existing file only if needed (optional)
     if (existingPets.pets.length > 0) {
       await this.lockerService.deleteFile('pet_list');
     }

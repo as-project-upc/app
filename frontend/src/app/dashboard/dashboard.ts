@@ -53,6 +53,7 @@ export class Dashboard {
   ];
 
   pets :any = [];
+  lockerData: any;
 
   ngOnInit() {
     this.getAllPets();
@@ -86,19 +87,22 @@ export class Dashboard {
 async getAllPets() {
   try {
     const res = await this.lockerService.downloadEncryptedFile('pet_list');
+    const r = await this.lockerService.downloadFile('pet0');
     if (res) {
-      const lockerData = JSON.parse(res);
+      this.lockerData = JSON.parse(res);
       this.zone.run(() => {
-        this.pets = lockerData.pets.map((p: any) => ({
+        this.pets = this.lockerData.pets.map((p: any) => ({
+          id: p.id,
           name: p.name,
           breed: p.breed,
           nextAppt: p.nextAppt || 'No appointments',
           image: p.image
             ? false
-            : '../../assets/images/default-dog.jpg',
+            : '../../assets/images/dog.jpg',
         }));
-        this.cd.detectChanges(); // ensure Angular sees the update
+        this.cd.detectChanges();
       });
+      console.log(this.lockerData.pets)
     }
   } catch (err) {
     console.error('Error fetching pets from locker', err);
@@ -106,17 +110,22 @@ async getAllPets() {
   }
 }
 
-  getPetDetails() {
-
-    const res = this.lockerService.downloadEncryptedFile('pet_list');
-    console.log(res)
-
+  getPetDetails(petId: number) {
     this.selectedRequestType = "Pet Details";
+
+    const selectedPet = this.lockerData.pets.find((p: any) => p.id === petId);
+    if (!selectedPet) {
+      console.error('Pet not found with ID:', petId);
+      return;
+    }
+
     this.dialog.open(ModalDialog, {
       panelClass: 'custom-dialog-panel',
       data: {
-        mode: this.selectedRequestType
+        mode: this.selectedRequestType,
+        pet: selectedPet
       }
     });
   }
+
 }

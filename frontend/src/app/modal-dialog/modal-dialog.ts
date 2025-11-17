@@ -11,17 +11,13 @@ import { PetsDetails } from "../pets-details/pets-details";
   styleUrl: './modal-dialog.css'
 })
 export class ModalDialog {
-@Input() title: any;
-  @Input() tab: any;
-  @Input() mode: any;
-  @Input() modalData: any;
-  @Output() showModal: any;
+  pet: any;
 
-  constructor(private dialogRef: MatDialogRef<ModalDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: { mode: string, tab: string, modalData: any }
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private dialogRef: MatDialogRef<ModalDialog>
   ) {
-    this.tab = data.tab;
-    this.modalData = data.modalData;
+    this.pet = data.pet;
   }
 
   ngOnInit(){

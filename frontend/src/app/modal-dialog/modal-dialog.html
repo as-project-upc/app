@@ -8,7 +8,7 @@
 
   <ng-container [ngSwitch]="this.data.mode">
     <app-pets-add *ngSwitchCase="'Add Pet'"></app-pets-add>
-    <app-pets-details *ngSwitchCase="'Pet Details'"></app-pets-details>
+    <app-pets-details *ngSwitchCase="'Pet Details'" [pet]="this.pet"></app-pets-details>
   </ng-container>
 
 

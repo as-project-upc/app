@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AngularMaterialModule } from '../ang-material.module';
 import { LockerService } from '../shared/services/locker.service';
@@ -10,22 +10,15 @@ import { LockerService } from '../shared/services/locker.service';
   styleUrl: './pets-details.css'
 })
 export class PetsDetails {
-  petId!: number;
+  @Input() pet: any
 
-  pet: any = {
-    id: 1,
-    name: "Milo",
-    species: "Dog",
-    age: 4,
-    notes: "Vaccinated, allergic to peanuts",
-    image: '../../assets/images/dog1.jpg'
-  };
+
   selectedImage: any;
   petForm: any;
 
   constructor(private route: ActivatedRoute, private router: Router, private lockerService: LockerService) {
-    this.petId = Number(this.route.snapshot.paramMap.get('id'));
   }
+
 
   savePet() {
     console.log("Pet saved:", this.pet);

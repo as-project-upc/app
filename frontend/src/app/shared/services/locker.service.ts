@@ -97,7 +97,25 @@ export class LockerService {
     });
 
     const blob = await res.blob();
-    return URL.createObjectURL(blob); // ready to bind to <img [src]="...">
+    return URL.createObjectURL(blob);
   }
+
+  async uploadFile(file: File, filename: string) {
+  if (!this.client) throw new Error('Client not initialized');
+
+  const formData = new FormData();
+  formData.append('file', file, filename);
+
+  const res = await fetch(`${this.baseUrl}/api/locker/${filename}`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${this.client.token}`,
+    },
+    body: formData,
+  });
+
+  return res.json();
+}
+
 
 }
