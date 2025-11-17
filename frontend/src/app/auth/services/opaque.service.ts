@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Client } from '../../services/opaque-client';
+import { Client } from '../../shared/services/opaque-client.service';
 
 @Injectable({
   providedIn: 'root',

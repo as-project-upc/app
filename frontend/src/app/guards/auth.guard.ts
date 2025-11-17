@@ -39,7 +39,7 @@ export class AuthGuard implements CanActivate {
 
     } catch (err) {
       console.error('Invalid token, redirecting to login...', err);
-      localStorage.removeItem('authToken');
+      localStorage.clear()
       this.router.navigate(['/login']);
       return false;
     }
