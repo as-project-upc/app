@@ -1,0 +1,24 @@
+<div class="container">
+  <h2>Schedule Appointment</h2>
+
+  <form (ngSubmit)="schedule()">
+
+    <label>Choose Pet:</label>
+    <select [(ngModel)]="data.petId" name="petId">
+      <option *ngFor="let pet of pets" [value]="pet.id">{{ pet.name }}</option>
+    </select>
+
+    <label>Choose Doctor:</label>
+    <select [(ngModel)]="data.doctorId" name="doctorId">
+      <option *ngFor="let doc of doctors" [value]="doc.id">Dr. {{ doc.name }}</option>
+    </select>
+
+    <label>Select Date & Time:</label>
+    <input type="datetime-local" [(ngModel)]="data.date" name="date">
+
+    <label>Reason for Visit:</label>
+    <textarea [(ngModel)]="data.reason" name="reason"></textarea>
+
+    <button class="btn">Schedule Appointment</button>
+  </form>
+</div>

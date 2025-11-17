@@ -1,0 +1,15 @@
+<div class="modal">
+  <div class="actions-card-title">
+    {{this.data.mode}}
+    <button class="circle-btn" (click)="closeDialog()">
+            <img src="assets/icons/close.svg" class="edit-icon">
+    </button>
+  </div>
+
+  <ng-container [ngSwitch]="this.data.mode">
+    <app-pets-add *ngSwitchCase="'Add Pet'"></app-pets-add>
+    <app-pets-details *ngSwitchCase="'Pet Details'"></app-pets-details>
+  </ng-container>
+
+
+</div>

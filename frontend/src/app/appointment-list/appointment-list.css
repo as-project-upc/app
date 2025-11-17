@@ -1,0 +1,10 @@
+.container { padding: 20px; }
+
+.appointment-card {
+  background: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 10px 0;
+  box-shadow: 0 2px 6px #dddddd;
+  cursor: pointer;
+}

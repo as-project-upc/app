@@ -1,0 +1,10 @@
+<div class="container">
+  <h2>Appointment Details</h2>
+
+  <p><strong>Pet:</strong> {{ appointment.petName }}</p>
+  <p><strong>Date:</strong> {{ appointment.date }}</p>
+  <p><strong>Doctor:</strong> Dr. {{ appointment.doctor }}</p>
+  <p><strong>Status:</strong> {{ appointment.status }}</p>
+
+  <a class="btn" routerLink="/chat?appointment={{appointment.id}}">Open Chat</a>
+</div>
