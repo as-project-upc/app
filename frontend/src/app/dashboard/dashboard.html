@@ -1,1 +1,149 @@
-<p>dashboard works!</p>
+<div class="dashboard-container">
+
+  <!-- REMINDERS CARD -->
+  <div class="card">
+    <div class="card-header">
+      <h3> <img src="../../assets/icons/reminders.svg" alt="edit" class="edit-icon" /> Upcoming Reminders</h3>
+    </div>
+
+    <div class="table-wrapper">
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Pet</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr *ngFor="let r of reminders">
+            <td>{{ r.date }}</td>
+            <td>{{ r.pet }}</td>
+            <td>{{ r.description }}</td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- APPOINTMENTS CARD -->
+  <div class="card">
+    <div class="card-header">
+      <h3> <img src="../../assets/icons/calendar.svg" alt="edit" class="edit-icon" /> Upcoming Appointments</h3>
+    </div>
+
+    <div class="table-wrapper">
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Pet</th>
+            <th>Virtual</th>
+            <th>Attachments</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr *ngFor="let a of appointments">
+            <td>{{ a.date }}</td>
+            <td>{{ a.time }}</td>
+            <td>{{ a.pet }}</td>
+
+            <!-- Virtual Icon -->
+            <td>
+              @if (a.virtual) {
+              <img src="../../assets/icons/camera.svg" alt="edit" class="edit-icon" />
+              }
+            </td>
+
+            <!-- Attachments -->
+            <td>
+              <span *ngIf="a.attachments" class="manage">
+                {{ a.attachments }}
+              </span>
+            </td>
+
+            <!-- Action -->
+            <td>
+              <button *ngIf="a.status === 'cancel'" class="cancel-btn">
+                Cancel Appointment?
+              </button>
+
+              <button *ngIf="a.status === 'confirmed'" class="confirmed-btn">
+                Confirmed
+              </button>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+
+</div>
+
+<div class="pets-section">
+
+  <h3 class="section-title"> <img src="../../assets/icons/pet-icon.svg" alt="edit" class="edit-icon" /> YOUR PETS</h3>
+
+  <div class="carousel-container">
+
+    <!-- <button class="arrow-btn left" (click)="prevSlide()">
+      ◀
+    </button> -->
+
+    <!-- Slider -->
+    <div class="carousel-window">
+      <div class="carousel-track">
+
+        <div class="pet-card" *ngFor="let p of pets">
+          <img [src]="p.image" class="pet-image" />
+
+          <div class="pet-info">
+            <h4 class="pet-name">{{ p.name }}</h4>
+            <p class="pet-breed">{{ p.breed }}</p>
+            <p class="next-appt" *ngIf="p.nextAppt && p.nextAppt !== '  '">
+              Next appointment: {{ p.nextAppt }}
+            </p>
+          </div>
+
+          <div class="pet-actions">
+            <button class="circle-btn" (click)="getPetDetails()">
+              <img src="assets/icons/info.svg" class="edit-icon" />
+            </button>
+
+            <button class="circle-btn">
+              <img src="assets/icons/calendar.svg" class="edit-icon" />
+            </button>
+          </div>
+        </div>
+
+
+        <!-- ADD NEW PET CARD -->
+        <div class="pet-card add-pet-card">
+          <div class="add-dog-wrapper">
+            <img src="assets/images/add_pet.png" class="add-dog-img" />
+            <h4 class="new-pet-title">New Pet</h4>
+            <p class="new-pet-subtitle">Add For New Pet</p>
+          </div>
+
+          <button class="circle-btn" (click)="onAddPet()">
+            <img src="assets/icons/add.svg" class="edit-icon" />
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- <button class="arrow-btn right" (click)="nextSlide()">
+      ▶
+    </button> -->
+
+  </div>
+</div>

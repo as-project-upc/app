@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
+import { OpaqueService } from '../auth/services/opaque.service';
 
 interface JwtPayload {
+  username: string,
+  email: string,
+  role: string,
   exp?: number;
   [key: string]: any;
 }
@@ -12,7 +16,7 @@ interface JwtPayload {
 })
 export class AuthGuard implements CanActivate {
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: OpaqueService) {}
 
   canActivate(): boolean {
     const token = localStorage.getItem('authToken');
@@ -26,7 +30,7 @@ export class AuthGuard implements CanActivate {
 
     try {
       const decoded: JwtPayload = jwtDecode(token);
-      console.log(decoded.exp);
+        this.authService.setUser(decoded.username, decoded.email, decoded.role);
 
       if (decoded.exp && Date.now() >= decoded.exp * 1000) {
         console.log('Token expired, redirecting to login...');

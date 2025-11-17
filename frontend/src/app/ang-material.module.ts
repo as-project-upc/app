@@ -38,7 +38,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatTreeModule} from '@angular/material/tree';
 import {OverlayModule} from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 
 const DragConfig = {
@@ -49,6 +50,7 @@ const DragConfig = {
 
 @NgModule({
   exports: [
+    FormsModule,
     CommonModule,
     ReactiveFormsModule,
     DragDropModule,
@@ -89,7 +91,8 @@ const DragConfig = {
     MatTreeModule,
     OverlayModule,
     PortalModule,
-    ScrollingModule
+    ScrollingModule,
+    RouterModule
   ],
   providers : [{ provide: CDK_DRAG_CONFIG, useValue: DragConfig }]
 })

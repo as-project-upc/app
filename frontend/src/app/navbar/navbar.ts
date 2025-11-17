@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { OpaqueService } from '../auth/services/opaque.service';
 
 @Component({
   selector: 'app-navbar',
@@ -10,8 +11,17 @@ import { Router } from '@angular/router';
 export class Navbar {
 
   profileDropdown: boolean = false;
+  username: any;
+  email :any;
+  role :any;
+  constructor(private router: Router, private authService: OpaqueService) {}
 
-  constructor(private router: Router) {}
+
+  ngOnInit(){
+    this.username = this.authService.username
+    this.email = this.authService.email
+    this.role = this.authService.role
+  }
 
   logout() {
     console.log('Logging out user...');
@@ -22,4 +32,6 @@ export class Navbar {
   toggleDropdown(){
     this.profileDropdown = true;
   }
+
+
 }
