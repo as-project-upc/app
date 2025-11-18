@@ -76,7 +76,7 @@ export class CreateAppointment {
       JSON.stringify(existingData)
     );
 
-    this.appointmentSaved.emit(this.appointmentForm.value);
+    this.appointmentSaved.emit(appointmentJson);
     this.appointmentForm.reset({ status: 'confirmed', virtual: false });
     this.closePanel();
 
