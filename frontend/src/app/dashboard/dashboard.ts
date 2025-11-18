@@ -137,21 +137,20 @@ export class Dashboard {
     }
   }
 
-  onAddPet() {
-    this.selectedRequestType = "Add Pet";
+onAddPet() {
+  this.selectedRequestType = "Add Pet";
 
-    const dialogRef = this.dialog.open(ModalDialog, {
-      panelClass: 'custom-dialog-panel',
-      data: { mode: this.selectedRequestType }
-    });
+  const dialogRef = this.dialog.open(ModalDialog, {
+    panelClass: 'custom-dialog-panel',
+    data: { mode: this.selectedRequestType }
+  });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result?.refresh) {
-        console.log(result)
-        this.getAllPets(); // Refresh pet list after add
-      }
-    });
-  }
+  dialogRef.afterClosed().subscribe(result => {
+    if (result?.saved || result?.refresh) {
+      this.getAllPets(); // Refresh pet list after add
+    }
+  });
+}
 
   getPetDetails(petId: number) {
     this.selectedRequestType = "Pet Details";
@@ -173,11 +172,5 @@ export class Dashboard {
       }
     });
   }
-
-
-  refreshPetsList() {
-    this.getAllPets();
-  }
-
 
 }

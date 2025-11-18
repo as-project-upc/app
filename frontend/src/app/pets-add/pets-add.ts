@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { AngularMaterialModule } from '../ang-material.module';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LockerService } from '../shared/services/locker.service';
@@ -15,6 +15,8 @@ import { v4 as uuidv4} from 'uuid';
 })
 export class PetsAdd {
   petForm!: FormGroup;
+  @Output() petAdded = new EventEmitter<void>();
+
   speciesList = [
     'Labrador Retriever', 'German Shepherd', 'Golden Retriever', 'Bulldog',
     'Beagle', 'Poodle', 'Rottweiler', 'Yorkshire Terrier', 'Boxer',
@@ -93,7 +95,7 @@ export class PetsAdd {
       appointments: []
     };
 
-    if (existingPets.pets.length > 0) {
+    if (existingPets.pets.length >= 0) {
       await this.lockerService.deleteFile('pet_list');
     }
 
@@ -103,7 +105,7 @@ export class PetsAdd {
       'pet_list',
       JSON.stringify(existingPets)
     );
-
+    this.petAdded.emit();
     this.dialogRef.close({ saved: true });
   }
 
