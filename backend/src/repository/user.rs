@@ -1,4 +1,4 @@
-use crate::domain::user::{Role, User};
+use crate::domain::user::{Role, UserDto};
 use sqlx::SqlitePool;
 
 #[derive(Debug, Clone)]
@@ -17,8 +17,8 @@ impl UserRepository {
         email: String,
         password_file: Vec<u8>,
         role: Role,
-    ) -> Result<User, sqlx::Error> {
-        let user = sqlx::query_as::<_, User>(
+    ) -> Result<UserDto, sqlx::Error> {
+        let user = sqlx::query_as::<_, UserDto>(
             r#"
             INSERT INTO users (id,username, password_file, email, role)
             VALUES (?,?, ?, ?, ?)
@@ -36,8 +36,8 @@ impl UserRepository {
         Ok(user)
     }
 
-    pub async fn get_by_username(&self, username: &str) -> Result<Option<User>, sqlx::Error> {
-        let user = sqlx::query_as::<_, User>(
+    pub async fn get_by_username(&self, username: &str) -> Result<Option<UserDto>, sqlx::Error> {
+        let user = sqlx::query_as::<_, UserDto>(
             "SELECT id, username, password_file, email, role FROM users WHERE username = ?",
         )
         .bind(username)
@@ -45,5 +45,14 @@ impl UserRepository {
         .await?;
 
         Ok(user)
+    }
+
+    pub async fn get_doctors(&self) -> Result<Vec<UserDto>, sqlx::Error> {
+        let users = sqlx::query_as::<_, UserDto>("SELECT id, username FROM users where role = ?")
+            .bind("doctor")
+            .fetch_all(&self.pool)
+            .await?;
+
+        Ok(users)
     }
 }

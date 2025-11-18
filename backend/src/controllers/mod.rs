@@ -6,3 +6,4 @@ pub mod register;
 pub mod static_files;
 pub mod user;
 pub mod websocket;
+pub mod doctor;

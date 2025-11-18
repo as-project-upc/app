@@ -6,6 +6,7 @@ use std::fmt;
 #[serde(rename_all = "lowercase")]
 pub enum Role {
     Admin,
+    Doctor,
     User,
 }
 
@@ -14,6 +15,7 @@ impl fmt::Display for Role {
         match self {
             Role::User => write!(f, "user"),
             Role::Admin => write!(f, "admin"),
+            Role::Doctor => write!(f, "doctor"),
         }
     }
 }
@@ -40,7 +42,7 @@ impl From<Role> for String {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
-pub struct User {
+pub struct UserDto {
     pub id: String,
     pub username: String,
     #[serde(skip_serializing)]
@@ -49,13 +51,13 @@ pub struct User {
     pub role: Role,
 }
 
-impl<'r> sqlx::FromRow<'r, sqlx::sqlite::SqliteRow> for User {
+impl<'r> sqlx::FromRow<'r, sqlx::sqlite::SqliteRow> for UserDto {
     fn from_row(row: &'r sqlx::sqlite::SqliteRow) -> Result<Self, sqlx::Error> {
         use sqlx::Row;
 
         let role_str: String = row.try_get("role")?;
 
-        Ok(User {
+        Ok(UserDto {
             id: row.try_get("id")?,
             username: row.try_get("username")?,
             password_file: row.try_get("password_file")?,
