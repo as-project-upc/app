@@ -4,8 +4,9 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-axum = { version = "0.8.6", features = ["multipart"] }
-axum-server = { version = "0.7.2", features = ["tls-rustls-no-provider"] }
+axum = { version = "0.8.7", features = ["multipart", "ws"] }
+axum-server = { version = "0.7.3", features = ["tls-rustls-no-provider"] }
+futures-util = { version = "0.3.31", default-features = false, features = ["sink", "std"] }
 rustls = { version = "0.23.35", default-features = false, features = ["ring"] }
 serde = { version = "1.0.228", features = ["derive"] }
 uuid = { version = "1.18.1", features = ["v7"] }
@@ -23,3 +24,5 @@ thiserror = "2.0.17"
 dotenvy = "0.15.7"
 rust-embed = "8.9.0"
 mime_guess = "2.0.5"
+headers = "0.4.1"
+log = "0.4.28"

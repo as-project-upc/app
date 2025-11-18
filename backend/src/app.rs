@@ -1,10 +1,9 @@
 use crate::controllers;
 use crate::utils::opaque::OpaqueServer;
 use crate::utils::{auth_middleware, require_admin, require_user};
-use axum::handler::Handler;
 use axum::http::header::AUTHORIZATION;
 use axum::http::HeaderValue;
-use axum::routing::{delete, get, post};
+use axum::routing::{any, delete, get, post};
 use axum::{middleware, Extension, Router};
 use axum_server::tls_rustls::RustlsConfig;
 use std::net::SocketAddr;
@@ -22,6 +21,7 @@ impl App {
         let opaque_server = OpaqueServer::new(pool.clone()).await;
 
         let public_routes = Router::new()
+            .route("/ws", any(controllers::websocket::handler))
             .route(
                 "/register/start",
                 post(controllers::register::register_start_handler),
@@ -89,8 +89,16 @@ impl App {
             )
             .layer(
                 TraceLayer::new_for_http()
-                    .make_span_with(DefaultMakeSpan::new().level(Level::INFO))
-                    .on_response(DefaultOnResponse::new().level(Level::TRACE))
+                    .make_span_with(
+                        DefaultMakeSpan::new()
+                            .include_headers(true)
+                            .level(Level::TRACE),
+                    )
+                    .on_response(
+                        DefaultOnResponse::new()
+                            .include_headers(true)
+                            .level(Level::TRACE),
+                    )
                     .on_request(DefaultOnRequest::new().level(Level::TRACE)),
             )
             .with_state(pool.clone());
@@ -104,7 +112,7 @@ async fn start_http(app: Router) {
     tracing::info!("Server running on http://localhost:3000");
     axum::serve(
         tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap(),
-        app,
+        app.into_make_service_with_connect_info::<SocketAddr>(),
     )
     .with_graceful_shutdown(shutdown_signal())
     .await
@@ -129,7 +137,7 @@ async fn start_https(app: Router) {
             .expect("Failed to load certificates"),
     )
     .handle(handle)
-    .serve(app.into_make_service())
+    .serve(app.into_make_service_with_connect_info::<SocketAddr>())
     .await
     .unwrap();
 }
