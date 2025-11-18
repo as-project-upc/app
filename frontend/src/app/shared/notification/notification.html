@@ -1,0 +1,8 @@
+<div *ngIf="visible" class="notif-box" [ngClass]="current?.type">
+
+  <strong>{{ current?.title }}</strong>
+  <p>{{ current?.message }}</p>
+
+  <button class="close-btn" (click)="close()">Close</button>
+
+</div>
