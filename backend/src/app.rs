@@ -60,6 +60,18 @@ impl App {
         let user_routes = Router::new()
             .route("/user", get(controllers::user::handler))
             .route("/doctors", get(controllers::doctor::handler))
+            .route(
+                "/appointment/{user_id}",
+                post(controllers::appointment::add_appointment),
+            )
+            .route(
+                "/appointment",
+                get(controllers::appointment::list_appointments),
+            )
+            .route(
+                "/appointment",
+                delete(controllers::appointment::delete_appointment),
+            )
             .route_layer(middleware::from_fn(require_user))
             .route_layer(middleware::from_fn(auth_middleware));
 

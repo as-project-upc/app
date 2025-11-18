@@ -1,5 +1,5 @@
 use crate::domain::result::ApiResult;
-use crate::domain::user::Role;
+use crate::repository::user::Role;
 use crate::utils::Claims;
 use axum::{response::Json, Extension};
 use serde::{Deserialize, Serialize};

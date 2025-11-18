@@ -1,7 +1,6 @@
 use crate::domain::error::ApiError;
 use crate::domain::result::ApiResult;
-use crate::domain::user::Role;
-use crate::repository::user::UserRepository;
+use crate::repository::user::{Role, UserRepository};
 use crate::utils::{base64_serde, jwt};
 use axum::extract::State;
 use axum::Json;

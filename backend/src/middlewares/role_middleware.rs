@@ -1,5 +1,5 @@
 use crate::domain::error::ApiError;
-use crate::domain::user::Role;
+use crate::repository::user::Role;
 use crate::utils::Claims;
 use axum::{
     extract::Request,

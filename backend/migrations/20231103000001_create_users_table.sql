@@ -15,6 +15,15 @@ CREATE INDEX IF NOT EXISTS idx_users_email ON users (email);
 CREATE INDEX IF NOT EXISTS idx_users_role ON users (role);
 
 
+CREATE TABLE IF NOT EXISTS appointment
+(
+    appointment_id TEXT     NOT NULL PRIMARY KEY,
+    user_id        TEXT     NOT NULL,
+    date           DATETIME NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_appointments_user_id ON appointment (user_id, appointment_id);
+
 
 CREATE TABLE IF NOT EXISTS server_data
 (

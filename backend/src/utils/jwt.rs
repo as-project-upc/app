@@ -1,4 +1,4 @@
-use crate::domain::user::Role;
+use crate::repository::user::Role;
 use jsonwebtoken::{decode, encode, Algorithm, DecodingKey, EncodingKey, Header, Validation};
 use serde::{Deserialize, Serialize};
 use std::time::{SystemTime, UNIX_EPOCH};

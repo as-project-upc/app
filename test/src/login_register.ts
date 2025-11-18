@@ -9,7 +9,7 @@ export const login_or_register = async (username: string, email: string, passwor
       username,
       email,
       password,
-      'admin'
+      role
     );
     console.log(JSON.stringify(registerResponse, null, 2));
   } catch (e) {

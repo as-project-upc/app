@@ -1,4 +1,6 @@
 pub mod admin;
+pub mod appointment;
+pub mod doctor;
 pub mod locker;
 pub mod login;
 pub mod me;
@@ -6,4 +8,3 @@ pub mod register;
 pub mod static_files;
 pub mod user;
 pub mod websocket;
-pub mod doctor;

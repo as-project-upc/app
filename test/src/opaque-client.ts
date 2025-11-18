@@ -49,7 +49,7 @@ export class Client {
     this.initialized = ready;
   }
   
-  async register(username: string, email: string, password: string, role: 'user' | 'admin'): Promise<LoginResponse> {
+  async register(username: string, email: string, password: string, role: 'user' | 'admin' | 'doctor'): Promise<LoginResponse> {
     await this.initialized;
     
     const {clientRegistrationState, registrationRequest} = client.startRegistration({password});
