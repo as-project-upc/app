@@ -1,0 +1,256 @@
+/* ================================
+   REMINDERS + APPOINTMENTS SECTION
+================================ */
+
+.dashboard-container {
+  display: flex;
+  gap: 25px;
+}
+
+.card {
+  flex: 1;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.link {
+  color: #34a853;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+/* Tables */
+.table-wrapper {
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.custom-table th {
+  text-align: left;
+  padding: 10px;
+  font-size: 14px;
+  color: #666;
+  border-bottom: 2px solid #eaeaea;
+}
+
+.custom-table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #f3f3f3;
+  font-size: 14px;
+}
+
+.custom-table tr:hover {
+  background: #f8f9fc;
+}
+
+/* Buttons */
+.cancel-btn {
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.confirmed-btn {
+  background: #2ecc71;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+/* Manage link */
+.manage {
+  color: #2e7dff;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* Virtual icon */
+.icon.virtual {
+  width: 18px;
+  height: 18px;
+  background-color: #34a853;
+  display: inline-block;
+  border-radius: 50%;
+}
+
+/* ================================
+          PETS CAROUSEL
+================================ */
+
+.pets-section{
+  margin-top: 20px;
+}
+
+.carousel-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-top: 30px;
+}
+
+.carousel-window {
+  overflow: hidden;
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.4s ease;
+}
+
+/* Pet Card (Unified) */
+.pet-card {
+  width: 280px;
+  margin-right: 20px;
+  background: #fff;
+  border-radius: 2px;
+  padding: 5px;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.pet-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.pet-info {
+  padding: 10px 5px;
+}
+
+.pet-name {
+  font-size: 17px;
+  font-weight: 400;
+  color: #2e3f32;
+  margin: 0;
+}
+
+.pet-breed {
+  font-size: 14px;
+  font-weight: 600;
+  color: #63B174;
+  margin-top: 3px;
+}
+
+.next-appt {
+  font-size: 12px;
+  color: #888;
+  margin-top: 5px;
+}
+
+.pet-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.circle-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid #dcdcdc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: #fff;
+  transition: 0.2s;
+}
+
+.circle-btn:hover {
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+
+.edit-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Add Pet Card */
+.add-pet-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 25px 10px;
+}
+
+.add-dog-img {
+  width: 110px;
+  opacity: 0.9;
+}
+
+.new-pet-title {
+  margin-top: 10px;
+  font-size: 17px;
+  font-weight: 700;
+  color: #2e3f32;
+}
+
+.new-pet-subtitle {
+  font-size: 13px;
+  color: #4b6f52;
+  margin-top: 4px;
+}
+
+/* Carousel Arrows */
+.arrow-btn {
+  background: #fff;
+  border: none;
+  font-size: 32px;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 50%;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.15);
+}
+
+.arrow-btn:hover {
+  background: #f2f2f2;
+}
+
+.left {
+  margin-right: 10px;
+}
+
+.right {
+  margin-left: 10px;
+}
+
+.view-link {
+  font-size: 14px;
+  color: #63B174;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.view-link:hover {
+  text-decoration: underline;
+}

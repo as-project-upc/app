@@ -1,0 +1,20 @@
+<div class="side-panel" [class.open]="openPanel">
+  <h3>Add New Reminder</h3>
+
+  <form [formGroup]="reminderForm" (ngSubmit)="saveReminder()">
+
+    <label>Pet:</label>
+    <input type="text" formControlName="pet" required>
+
+    <label>Date:</label>
+    <input type="date" formControlName="date" required>
+
+    <label>Description:</label>
+    <textarea formControlName="description" rows="3" required></textarea>
+
+    <div class="buttons">
+      <button type="submit" [disabled]="reminderForm.invalid">Save</button>
+      <button type="button" (click)="closePanel()">Close</button>
+    </div>
+  </form>
+</div>

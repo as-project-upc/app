@@ -1,0 +1,57 @@
+<form [formGroup]="petForm" class="request-form" (ngSubmit)="savePet()">
+
+  <!-- Pet Name -->
+  <div class="form-group">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Pet Name</mat-label>
+      <input matInput placeholder="Enter pet name" formControlName="name">
+      <mat-error *ngIf="petForm.get('name')?.invalid">Pet name is required</mat-error>
+    </mat-form-field>
+  </div>
+
+  <!-- Breed -->
+  <div class="form-group">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Breed</mat-label>
+      <mat-select formControlName="breed" placeholder="Select breed">
+        <mat-option *ngFor="let sp of speciesList" [value]="sp">{{ sp }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="petForm.get('breed')?.invalid">Breed is required</mat-error>
+    </mat-form-field>
+  </div>
+
+  <!-- Age -->
+  <div class="form-group">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Age</mat-label>
+      <input type="number" matInput placeholder="Enter age" formControlName="age">
+      <mat-error *ngIf="petForm.get('age')?.invalid">Valid age is required</mat-error>
+    </mat-form-field>
+  </div>
+
+  <!-- Medical Notes -->
+  <div class="form-group">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Medical Notes</mat-label>
+      <textarea matInput rows="3" placeholder="Enter medical notes" formControlName="notes"></textarea>
+    </mat-form-field>
+  </div>
+
+  <!-- Pet Image Upload -->
+  <div class="form-group">
+    <label for="image">Pet Image</label>
+    <input type="file" (change)="onFileSelected($event)" accept="image/*">
+    <div *ngIf="selectedFile" class="preview">
+      <p>Selected File: {{ selectedFile.name }}</p>
+      <img [src]="imagePreview" *ngIf="imagePreview" alt="Pet Image Preview" class="pet-preview">
+    </div>
+  </div>
+
+  <!-- Submit Button -->
+  <div class="button-group modal">
+    <button mat-raised-button color="primary" type="submit" [disabled]="petForm.invalid">
+      Save Pet
+    </button>
+  </div>
+
+</form>

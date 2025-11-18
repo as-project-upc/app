@@ -1,0 +1,37 @@
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { OpaqueService } from '../auth/services/opaque.service';
+
+@Component({
+  selector: 'app-navbar',
+  imports: [],
+  templateUrl: './navbar.html',
+  styleUrl: './navbar.css'
+})
+export class Navbar {
+
+  profileDropdown: boolean = false;
+  username: any;
+  email :any;
+  role :any;
+  constructor(private router: Router, private authService: OpaqueService) {}
+
+
+  ngOnInit(){
+    this.username = this.authService.username
+    this.email = this.authService.email
+    this.role = this.authService.role
+  }
+
+  logout() {
+    console.log('Logging out user...');
+    localStorage.clear()
+    this.router.navigate(['/login']);
+  }
+
+  toggleDropdown(){
+    this.profileDropdown = true;
+  }
+
+
+}

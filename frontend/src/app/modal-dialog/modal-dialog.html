@@ -1,0 +1,21 @@
+<div class="modal">
+  <div class="actions-card-title">
+    {{ data.mode }}
+    <button class="circle-btn" (click)="closeDialog()">
+      <img src="assets/icons/close.svg" class="edit-icon">
+    </button>
+  </div>
+
+  <ng-container [ngSwitch]="data.mode">
+    <app-pets-add
+      *ngSwitchCase="'Add Pet'"
+      (petAdded)="handlePetAdded()">
+    </app-pets-add>
+
+    <app-pets-details
+      *ngSwitchCase="'Pet Details'"
+      [pet]="pet"
+      (petDeleted)="handlePetDeleted()">
+    </app-pets-details>
+  </ng-container>
+</div>
