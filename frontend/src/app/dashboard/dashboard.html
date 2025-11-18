@@ -1,6 +1,5 @@
 <div class="dashboard-container">
 
-  <!-- REMINDERS CARD -->
 <!-- REMINDERS CARD -->
 <div class="card">
   <div class="card-header">
@@ -51,7 +50,6 @@
           <th>Time</th>
           <th>Pet</th>
           <th>Virtual</th>
-          <th>Attachments</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -65,10 +63,6 @@
             @if (a.virtual) {
               <img src="../../assets/icons/camera.svg" alt="edit" class="edit-icon" />
             }
-          </td>
-
-          <td>
-            <span *ngIf="a.attachments" class="manage">{{ a.attachments }}</span>
           </td>
 
           <td>
