@@ -1,89 +1,86 @@
 <div class="dashboard-container">
 
   <!-- REMINDERS CARD -->
-  <div class="card">
-    <div class="card-header">
-      <h3> <img src="../../assets/icons/reminders.svg" alt="edit" class="edit-icon" /> Upcoming Reminders</h3>
-    </div>
+<!-- REMINDERS CARD -->
+<div class="card">
+  <div class="card-header">
+    <h3>
+      <img src="../../assets/icons/reminders.svg" alt="edit" class="edit-icon" />
+      Upcoming Reminders
+    </h3>
 
-    <div class="table-wrapper">
-      <table class="custom-table">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Pet</th>
-            <th>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-
-          <tr *ngFor="let r of reminders">
-            <td>{{ r.date }}</td>
-            <td>{{ r.pet }}</td>
-            <td>{{ r.description }}</td>
-          </tr>
-
-        </tbody>
-      </table>
-    </div>
+    <a class="view-link" routerLink="/reminders">View All</a>
   </div>
 
-  <!-- APPOINTMENTS CARD -->
-  <div class="card">
-    <div class="card-header">
-      <h3> <img src="../../assets/icons/calendar.svg" alt="edit" class="edit-icon" /> Upcoming Appointments</h3>
-    </div>
+  <div class="table-wrapper">
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Pet</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let r of reminders">
+          <td>{{ r.date }}</td>
+          <td>{{ r.pet }}</td>
+          <td>{{ r.description }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 
-    <div class="table-wrapper">
-      <table class="custom-table">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Pet</th>
-            <th>Virtual</th>
-            <th>Attachments</th>
-            <th>Action</th>
-          </tr>
-        </thead>
+<!-- APPOINTMENTS CARD -->
+<div class="card">
+  <div class="card-header">
+    <h3>
+      <img src="../../assets/icons/calendar.svg" alt="edit" class="edit-icon" />
+      Upcoming Appointments
+    </h3>
 
-        <tbody>
+    <a class="view-link" routerLink="/appointments">View All</a>
+  </div>
 
-          <tr *ngFor="let a of appointments">
-            <td>{{ a.date }}</td>
-            <td>{{ a.time }}</td>
-            <td>{{ a.pet }}</td>
+  <div class="table-wrapper">
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Pet</th>
+          <th>Virtual</th>
+          <th>Attachments</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let a of appointments">
+          <td>{{ a.date }}</td>
+          <td>{{ a.time }}</td>
+          <td>{{ a.pet }}</td>
 
-            <!-- Virtual Icon -->
-            <td>
-              @if (a.virtual) {
+          <td>
+            @if (a.virtual) {
               <img src="../../assets/icons/camera.svg" alt="edit" class="edit-icon" />
-              }
-            </td>
+            }
+          </td>
 
-            <!-- Attachments -->
-            <td>
-              <span *ngIf="a.attachments" class="manage">
-                {{ a.attachments }}
-              </span>
-            </td>
+          <td>
+            <span *ngIf="a.attachments" class="manage">{{ a.attachments }}</span>
+          </td>
 
-            <!-- Action -->
-            <td>
-              <button *ngIf="a.status === 'cancel'" class="cancel-btn">
-                Cancel Appointment?
-              </button>
-
-              <button *ngIf="a.status === 'confirmed'" class="confirmed-btn">
-                Confirmed
-              </button>
-            </td>
-          </tr>
-
-        </tbody>
-      </table>
-    </div>
+          <td>
+            <button *ngIf="a.status === 'cancel'" class="cancel-btn">Cancel Appointment?</button>
+            <button *ngIf="a.status === 'confirmed'" class="confirmed-btn">Confirmed</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
+</div>
+
 
 
 

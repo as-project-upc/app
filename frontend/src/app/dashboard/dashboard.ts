@@ -102,7 +102,6 @@ async getAllPets() {
         }));
         this.cd.detectChanges();
       });
-      console.log(this.lockerData.pets)
     }
   } catch (err) {
     console.error('Error fetching pets from locker', err);

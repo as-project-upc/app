@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LockerService } from '../shared/services/locker.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ModalDialog } from '../modal-dialog/modal-dialog';
+import { v4 as uuidv4} from 'uuid';
 
 @Component({
   selector: 'app-pets-add',
@@ -67,8 +68,7 @@ export class PetsAdd {
 
     let imageLockerId = '';
     if (this.selectedFile) {
-      const lockerId = 'pet' + petCount; // use count instead of Date.now()
-      await this.lockerService.deleteFile('pet1');
+      const lockerId = this.petForm.get('name')?.value
       await this.lockerService.uploadFile(this.selectedFile, lockerId);
       imageLockerId = lockerId;
     }
@@ -76,7 +76,7 @@ export class PetsAdd {
     const petData = this.petForm.value;
 
     const petJson = {
-      id: 'pet' + petCount,  // use count here
+      id: uuidv4(),
       name: petData.name,
       breed: petData.breed,
       age: petData.age,

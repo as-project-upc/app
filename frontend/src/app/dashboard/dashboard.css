@@ -5,7 +5,6 @@
 .dashboard-container {
   display: flex;
   gap: 25px;
-  margin-top: 70px;
 }
 
 .card {
@@ -242,4 +241,16 @@
 
 .right {
   margin-left: 10px;
+}
+
+.view-link {
+  font-size: 14px;
+  color: #63B174;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.view-link:hover {
+  text-decoration: underline;
 }
