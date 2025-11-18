@@ -1,0 +1,29 @@
+<div class="side-panel" [class.open]="openPanel">
+  <h3>Add New Appointment</h3>
+
+  <form [formGroup]="appointmentForm" (ngSubmit)="saveAppointment()">
+
+    <label>Pet:</label>
+    <input type="text" formControlName="pet" required>
+
+    <label>Date:</label>
+    <input type="date" formControlName="date" required>
+
+    <label>Time:</label>
+    <input type="time" formControlName="time" required>
+
+    <label>Virtual:</label>
+    <input type="checkbox" formControlName="virtual">
+
+    <label>Status:</label>
+    <select formControlName="status" required>
+      <option value="confirmed">Confirmed</option>
+      <option value="cancelled">Cancelled</option>
+    </select>
+
+    <div class="buttons">
+      <button type="submit" [disabled]="appointmentForm.invalid">Save</button>
+      <button type="button" (click)="closePanel()">Close</button>
+    </div>
+  </form>
+</div>

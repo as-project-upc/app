@@ -1,0 +1,56 @@
+<div class="page-container">
+  <div class="page-header">
+    <h2>Appointments</h2>
+    <button class="add-btn" (click)="showPanel = true">+ Add Appointment</button>
+  </div>
+
+  <div class="table-wrapper">
+    <table class="custom-table full">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Pet</th>
+          <th>Virtual</th>
+          <th>Status</th>
+          <th style="width: 180px;">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @if (appointments.length > 0) {
+    @for (a of appointments; track a) {
+      <tr>
+        <td>{{ a.date }}</td>
+        <td>{{ a.time }}</td>
+        <td>{{ a.pet }}</td>
+        <td>
+          <img *ngIf="a.virtual" src="../../assets/icons/camera.svg" class="icon">
+        </td>
+        <td>
+          <span
+            [class.confirmed]="a.status === 'confirmed'"
+            [class.cancelled]="a.status === 'cancelled'">
+            {{ a.status }}
+          </span>
+        </td>
+        <td class="actions">
+          <img src="../../../assets/icons/delete.svg" alt="delete" class="edit-icon" (click)="deleteAppointment(a.id)"/>
+        </td>
+      </tr>
+    }
+  } @else {
+    <tr>
+      <td colspan="12" class="no-data">
+        No appointments found
+      </td>
+    </tr>
+  }
+      </tbody>
+    </table>
+  </div>
+
+  <app-create-appointment [openPanel]="showPanel" (panelClosed)="showPanel=false"
+    (appointmentSaved)="handleSave($event)">
+  </app-create-appointment>
+</div>
