@@ -1,4 +1,4 @@
-import { Component, Inject, Input, Output } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AngularMaterialModule } from '../ang-material.module';
 import { PetsAdd } from "../pets-add/pets-add";
@@ -20,11 +20,15 @@ export class ModalDialog {
     this.pet = data.pet;
   }
 
-  ngOnInit(){
-  }
-
   closeDialog(): void {
     this.dialogRef.close();
   }
 
+  handlePetDeleted() {
+    this.dialogRef.close({ refresh: true });
+  }
+
+  handlePetAdded() {
+    this.dialogRef.close({ refresh: true });
+  }
 }

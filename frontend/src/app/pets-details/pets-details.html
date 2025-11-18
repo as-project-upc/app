@@ -2,41 +2,35 @@
 
   <!-- Left: Pet Image -->
   <div class="pet-image-section">
-  <div class="image-wrapper" (click)="fileInput.click()">
-    <img src="../../assets/images/dog.jpg" alt="Pet Image" class="pet-photo">
-    <div class="overlay">
-      <span>Click to Upload</span>
+    <div class="image-wrapper">
+      <img src="../../assets/images/dog.jpg" alt="Pet Image" class="pet-photo">
     </div>
   </div>
 
-  <!-- Hidden file input -->
-  <input type="file" #fileInput accept="image/*" (change)="onImageUpload($event)" hidden>
-</div>
-
-  <!-- Right: Editable Details -->
+  <!-- Right: Pet Details (Display Only) -->
   <div class="pet-details-section">
 
     <div class="form-group">
-      <label>Pet Name</label>
-      <input type="text" [(ngModel)]="pet.name" class="input-field">
+      <label>Pet Name:</label>
+      <span>{{ pet.name }}</span>
     </div>
 
     <div class="form-group">
-      <label>Species</label>
-      <input type="text" [(ngModel)]="pet.breed" class="input-field">
+      <label>Species:</label>
+      <span>{{ pet.breed }}</span>
     </div>
 
     <div class="form-group">
-      <label>Age</label>
-      <input type="number" [(ngModel)]="pet.age" class="input-field">
+      <label>Age:</label>
+      <span>{{ pet.age }}</span>
     </div>
 
     <div class="form-group">
-      <label>Medical Notes</label>
-      <textarea rows="3" [(ngModel)]="pet.notes" class="textarea-field"></textarea>
+      <label>Medical Notes:</label>
+      <span>{{ pet.notes }}</span>
     </div>
 
-    <button class="btn" (click)="savePet()">Save</button>
+    <button class="btn delete-btn" (click)="deletePet()">Delete</button>
 
   </div>
 

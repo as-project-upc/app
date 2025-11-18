@@ -60,7 +60,7 @@ export class CreateReminders {
   };
 
   // Delete old file before saving new
-  if (existingData.reminders.length > 0) {
+  if (existingData.reminders.length >= 0) {
     await this.lockerService.deleteFile('reminder_list');
   }
 

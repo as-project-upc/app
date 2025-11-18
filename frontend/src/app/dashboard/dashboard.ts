@@ -44,16 +44,6 @@ export class Dashboard {
     }
   }
 
-  onAddPet() {
-    this.selectedRequestType = "Add Pet";
-    this.dialog.open(ModalDialog, {
-      panelClass: 'custom-dialog-panel',
-      data: {
-        mode: this.selectedRequestType
-      }
-    });
-  }
-
   async getAllAppointments() {
     try {
       const res = await this.lockerService.downloadEncryptedFile('appointment_list');
@@ -83,7 +73,6 @@ export class Dashboard {
           this.cd.detectChanges();
         });
 
-        console.log('Top 5 newest appointments:', this.appointments);
       }
     } catch (err) {
       console.error('Error fetching appointments from locker', err);
@@ -115,7 +104,6 @@ export class Dashboard {
           this.cd.detectChanges();
         });
 
-        console.log('Top 5 newest reminders:', this.reminders);
       }
     } catch (err) {
       console.error('Error fetching reminders from locker', err);
@@ -149,6 +137,22 @@ export class Dashboard {
     }
   }
 
+  onAddPet() {
+    this.selectedRequestType = "Add Pet";
+
+    const dialogRef = this.dialog.open(ModalDialog, {
+      panelClass: 'custom-dialog-panel',
+      data: { mode: this.selectedRequestType }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result?.refresh) {
+        console.log(result)
+        this.getAllPets(); // Refresh pet list after add
+      }
+    });
+  }
+
   getPetDetails(petId: number) {
     this.selectedRequestType = "Pet Details";
 
@@ -158,13 +162,22 @@ export class Dashboard {
       return;
     }
 
-    this.dialog.open(ModalDialog, {
+    const dialogRef = this.dialog.open(ModalDialog, {
       panelClass: 'custom-dialog-panel',
-      data: {
-        mode: this.selectedRequestType,
-        pet: selectedPet
+      data: { mode: this.selectedRequestType, pet: selectedPet }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result?.refresh) {
+        this.getAllPets(); // Refresh pet list after delete
       }
     });
   }
+
+
+  refreshPetsList() {
+    this.getAllPets();
+  }
+
 
 }
