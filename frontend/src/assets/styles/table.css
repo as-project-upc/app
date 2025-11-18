@@ -1,0 +1,153 @@
+/* PAGE WRAPPER */
+.page-container {
+  background: #f5f7fb;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/* HEADER */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.page-header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  color: #2f2f2f;
+}
+
+.add-btn {
+  background: #4CAF50;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+  font-size: 14px;
+}
+
+.add-btn:hover {
+  background: #43a047;
+}
+
+/* TABLE */
+.table-wrapper {
+  overflow-x: auto;
+  background: white;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.custom-table.full {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.custom-table thead {
+  background: #eef2f6;
+}
+
+.custom-table th,
+.custom-table td {
+  padding: 12px;
+  font-size: 14px;
+  border-bottom: 1px solid #e2e6ea;
+}
+
+.custom-table th {
+  font-weight: 600;
+  color: #333;
+}
+
+/* ACTION BUTTONS */
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.view-btn,
+.edit-btn,
+.delete-btn {
+  padding: 4px 10px;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.view-btn {
+  background: #2196F3;
+  color: white;
+}
+
+.view-btn:hover {
+  background: #1986d8;
+}
+
+.edit-btn {
+  background: #FFC107;
+  color: #333;
+}
+
+.edit-btn:hover {
+  background: #e6ac05;
+}
+
+.delete-btn {
+  background: #E53935;
+  color: white;
+}
+
+.delete-btn:hover {
+  background: #c62828;
+}
+
+/* APPOINTMENT STATUS */
+.confirmed {
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+.cancelled {
+  color: #d32f2f;
+  font-weight: 600;
+}
+
+.icon {
+  width: 18px;
+}
+
+.edit-icon {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.custom-table th,
+.custom-table td {
+  padding: 12px;
+  font-size: 14px;
+  border-bottom: 1px solid #e2e6ea;
+  text-align: left; /* <-- ensures left alignment for both headers and rows */
+}
+
+.custom-table thead th {
+  font-weight: 600;
+  color: #333;
+  text-align: left; /* <-- explicitly left align headers */
+}
+
+.no-data {
+  text-align: center;
+  padding: 20px;
+  font-size: 16px;
+  color: #777;
+}
+
+

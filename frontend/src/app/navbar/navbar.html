@@ -1,0 +1,23 @@
+<nav class="gp-navbar">
+  <div class="gp-left">
+    <div class="gp-logo">
+      <img src="../../assets/icons/pet-icon.svg" alt="edit" class="edit-icon" /> GuardPaw
+    </div>
+
+  </div>
+
+  <div class="gp-right">
+  <div class="profile-wrapper">
+    <img src="../../assets/icons/profile-circle.svg"
+         alt="profile"
+         class="profile-icon" />
+
+    <div class="profile-dropdown">
+      <p class="dropdown-item" >{{email}}</p>
+      <p class="dropdown-item" >{{role}}</p>
+      <a class="dropdown-item" (click)="logout()">Logout</a>
+    </div>
+  </div>
+</div>
+
+</nav>

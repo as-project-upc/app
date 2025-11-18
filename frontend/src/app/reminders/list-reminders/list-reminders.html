@@ -1,0 +1,49 @@
+<div class="page-container">
+  <div class="page-header">
+    <h2>Reminders</h2>
+    <button class="add-btn" (click)="showPanel = true">+ Add Reminder</button>
+  </div>
+
+  <div class="table-wrapper">
+    <table class="custom-table full">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Pet</th>
+          <th>Description</th>
+          <th style="width: 160px;">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        @if (reminders.length > 0) {
+
+        @for (r of reminders; track r) {
+        <tr>
+          <td>{{ r.date }}</td>
+          <td>{{ r.pet }}</td>
+          <td>{{ r.description }}</td>
+          <td class="actions">
+            <img src="../../../assets/icons/delete.svg" alt="delete" class="edit-icon" (click)="deleteReminder(r.id)"/>
+          </td>
+        </tr>
+        }
+
+        } @else {
+
+        <tr>
+          <td colspan="4" class="no-data">
+            No reminders found
+          </td>
+        </tr>
+
+        }
+
+      </tbody>
+    </table>
+  </div>
+
+  <app-create-reminders [openPanel]="showPanel" (panelClosed)="showPanel=false" (reminderSaved)="handleSave($event)">
+  </app-create-reminders>
+</div>
