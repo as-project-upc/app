@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { OpaqueService } from '../auth/services/opaque.service';
+import { AngularMaterialModule } from '../ang-material.module';
 
 @Component({
   selector: 'app-navbar',
-  imports: [],
+  imports: [AngularMaterialModule],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css'
 })
@@ -31,6 +32,10 @@ export class Navbar {
 
   toggleDropdown(){
     this.profileDropdown = true;
+  }
+
+  goToDashboard(){
+    this.router.navigate(['/dashboard'])
   }
 
 
