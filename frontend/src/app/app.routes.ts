@@ -5,10 +5,10 @@ import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { Home } from './home/home';
 import { Dashboard } from './dashboard/dashboard';
-import { DoctorDashboard } from './doctor-dashboard/doctor-dashboard';
 import { RoleGuard } from './guards/role.guard';
 import { ListAppointments } from './appointments/list-appointments/list-appointments';
 import { ListReminders } from './reminders/list-reminders/list-reminders';
+import { Doctors } from './doctors/doctors';
 
 
 export const routes: Routes = [
@@ -26,9 +26,9 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: 'dashboard', component: Dashboard },
+      { path: 'doctors', component: Doctors },
       { path: 'reminders', component: ListReminders },
       { path: 'appointments', component: ListAppointments },
-      { path: 'doctor-dashboard', component: DoctorDashboard, canActivate: [RoleGuard]}
 
     ]
   },

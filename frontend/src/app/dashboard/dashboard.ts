@@ -4,6 +4,7 @@ import { Router, RouterModule } from '@angular/router';
 import { ModalDialog } from '../modal-dialog/modal-dialog';
 import { MatDialog } from '@angular/material/dialog';
 import { LockerService } from '../shared/services/locker.service';
+import { OpaqueService } from '../auth/services/opaque.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,14 +17,17 @@ export class Dashboard {
   selectedRequestType: string = '';
   constructor(private dialog: MatDialog,
     private lockerService: LockerService,
+    private authService: OpaqueService,
     private cd: ChangeDetectorRef,
     private zone: NgZone) { }
   reminders: any = [];
   appointments: any = [];
   pets: any = [];
   lockerData: any;
+  role: any;
 
   ngOnInit() {
+    this.role = this.authService.role
     this.getAllPets();
     this.getAllAppointments();
     this.getAllReminders();

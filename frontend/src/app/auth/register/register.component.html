@@ -33,16 +33,11 @@
               <p>Password must be at least 8 characters long</p>
             }
             @if (registerForm.get('password')?.errors?.['pattern']) {
-              <p>Password must include at least one uppercase letter, one lowercase letter,
+              <p>Password must include at least one uppercase letter,
+                one lowercase letter,
               one number, and one special character</p>
             }
           </div>
-        }
-
-        @if (registerForm.get('password')?.value && !registerForm.get('password')?.errors) {
-          <p class="strength" [ngClass]="passwordStrength">
-            {{ passwordStrength | uppercase }}
-          </p>
         }
       </div>
 
