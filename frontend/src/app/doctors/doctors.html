@@ -1,13 +1,9 @@
 <div class="doctor-grid">
   <div class="doctor-card" *ngFor="let d of doctors">
-    <img [src]="d.image || '../../assets/images/doctor.jpg'" class="doctor-image" />
+    <img [src]="d.image || '../../assets/images/doctor_profile.jpg'" class="doctor-image" />
 
     <div class="doctor-info">
-      <h4 class="doctor-name">{{ d.name }}</h4>
-      <p class="doctor-specialty">{{ d.specialty }}</p>
-      <p class="next-appointment" *ngIf="d.nextAppointment && d.nextAppointment !== '  '">
-        Next appointment: {{ d.nextAppointment }}
-      </p>
+      <h4 class="doctor-name">{{ d.username }}</h4>
     </div>
 
     <div class="doctor-actions">
