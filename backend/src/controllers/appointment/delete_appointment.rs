@@ -12,7 +12,7 @@ pub async fn delete_appointment(
     State(pool): State<SqlitePool>,
 ) -> ApiResult<()> {
     let appointment_repo = AppointmentsRepository::new(pool.clone());
-
+    dbg!(&claims);
     appointment_repo
         .get_by_appointment_by_id(&appointment_id, &claims.sub)
         .await

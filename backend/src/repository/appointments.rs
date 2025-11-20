@@ -21,15 +21,15 @@ impl AppointmentsRepository {
     ) -> Result<Appointment, sqlx::Error> {
         let appointment = sqlx::query(
             r#"
-            INSERT INTO appointment(appointment_id, user_id, date, doctor_id)
-            VALUES (?,?, ?, ?)
-            RETURNING appointment_id, user_id, date, doctor_id
+            INSERT INTO appointment(appointment_id, user_id, doctor_id, date)
+            VALUES (?, ?, ?, ?)
+            RETURNING appointment_id, user_id, doctor_id, date
             "#,
         )
         .bind(&uuid::Uuid::now_v7().to_string())
         .bind(user_id)
-        .bind(date.to_rfc3339())
         .bind(doctor_id)
+        .bind(date.to_rfc3339())
         .fetch_one(&self.pool)
         .await?;
 
@@ -56,7 +56,7 @@ impl AppointmentsRepository {
         user_id: &str,
     ) -> Result<Appointment, sqlx::Error> {
         let user = sqlx::query(
-            "SELECT appointment_id, user_id,doctor_id, date FROM appointment WHERE appointment_id = ? and user_id = ?",
+            "SELECT appointment_id, user_id, doctor_id, date FROM appointment WHERE appointment_id = ? and user_id = ?",
         )
         .bind(appointment_id)
         .bind(user_id)

@@ -1,6 +1,6 @@
 import {Client} from "./opaque-client";
 
-export const login_or_register = async (username: string, email: string, password: string) => {
+export const login_or_register = async (username: string, email: string, password: string, role: "admin" | "user" | "doctor" = "admin") => {
   const client = new Client('http://localhost:3000');
   
   try {

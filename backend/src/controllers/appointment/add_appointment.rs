@@ -25,7 +25,6 @@ pub async fn add_appointment(
     Extension(claims): Extension<Claims>,
     Json(request): Json<AppointmentRequest>,
 ) -> ApiResult<AppointmentResponse> {
-    let user_id = claims.sub;
     let user_repo = UserRepository::new(pool.clone());
     let appointment_repo = AppointmentsRepository::new(pool.clone());
 
@@ -39,7 +38,7 @@ pub async fn add_appointment(
         })?;
 
     let appointment = appointment_repo
-        .create_appointment(user_id, request.doctor_id, request.date)
+        .create_appointment(claims.sub, request.doctor_id, request.date)
         .await
         .map_err(|_| ApiError::DatabaseError)?;
 
