@@ -134,3 +134,9 @@
 .image-wrapper:hover .overlay {
   opacity: 1;
 }
+.pet-image {
+  border-radius: 12px;
+  object-fit: cover;
+  height: 180px;
+  width: 100%;
+}

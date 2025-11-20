@@ -20,20 +20,4 @@
   height: 18px;
 }
 
-.circle-btn {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  border: 1px solid #dcdcdc;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  background: #fff;
-  transition: 0.2s;
-}
-
-.circle-btn:hover {
-  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
-}
 

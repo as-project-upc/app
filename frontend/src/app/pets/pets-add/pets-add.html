@@ -1,0 +1,63 @@
+<form [formGroup]="petForm" class="add-pet-form" (ngSubmit)="savePet()">
+
+   <div class="actions-card-title">
+
+
+     <h2 class="form-title">Add Pet</h2>
+
+     <button class="circle-btn" (click)="closeDialog()">
+       <img src="assets/icons/close.svg" class="edit-icon">
+      </button>
+    </div>
+
+  <!-- Pet Name -->
+  <mat-form-field appearance="outline" class="full-field">
+    <mat-label>Pet Name*</mat-label>
+    <input matInput formControlName="name" placeholder="Enter pet name" />
+    <mat-error *ngIf="petForm.get('name')?.invalid">Pet name is required</mat-error>
+  </mat-form-field>
+
+  <!-- Breed -->
+  <mat-form-field appearance="outline" class="full-field">
+    <mat-label>Breed*</mat-label>
+    <mat-select formControlName="breed" placeholder="Select breed">
+      <mat-option *ngFor="let sp of speciesList" [value]="sp">{{ sp }}</mat-option>
+    </mat-select>
+    <mat-error *ngIf="petForm.get('breed')?.invalid">Breed is required</mat-error>
+  </mat-form-field>
+
+  <!-- Age -->
+  <mat-form-field appearance="outline" class="full-field">
+    <mat-label>Age*</mat-label>
+    <input matInput type="number" formControlName="age" placeholder="Enter age" />
+    <mat-error *ngIf="petForm.get('age')?.invalid">Valid age is required</mat-error>
+  </mat-form-field>
+
+  <!-- Notes -->
+  <mat-form-field appearance="outline" class="full-field">
+    <mat-label>Medical Notes</mat-label>
+    <textarea matInput rows="3" formControlName="notes" placeholder="Enter medical notes"></textarea>
+  </mat-form-field>
+
+  <!-- Image Upload -->
+  <div class="upload-container">
+    <label class="upload-label">Pet Image</label>
+
+    <label class="upload-box">
+      <input type="file" accept="image/*" (change)="onFileSelected($event)" />
+      <span>Click to upload or drag an image</span>
+    </label>
+
+    <div *ngIf="imagePreview" class="image-preview-box">
+      <img [src]="imagePreview" alt="Preview" />
+    </div>
+  </div>
+
+  <!-- Submit Button -->
+  <div class="submit-row">
+    <button mat-raised-button class="save-btn" type="submit" [disabled]="petForm.invalid">
+      Save Pet
+    </button>
+  </div>
+
+</form>

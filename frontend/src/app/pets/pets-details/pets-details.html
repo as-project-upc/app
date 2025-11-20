@@ -3,9 +3,10 @@
   <!-- Left: Pet Image -->
   <div class="pet-image-section">
     <div class="image-wrapper">
-      <img src="../../assets/images/dog.jpg" alt="Pet Image" class="pet-photo">
+        <img [src]="pet.imageUrl || '../../../assets/images/dog.jpg'" class="pet-image">
     </div>
   </div>
+
 
   <!-- Right: Pet Details (Display Only) -->
   <div class="pet-details-section">

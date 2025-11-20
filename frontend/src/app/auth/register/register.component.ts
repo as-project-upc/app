@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AngularMaterialModule } from '../../ang-material.module';
 import { Router } from '@angular/router';
-import { OpaqueService } from '../services/opaque.service';
+import { OpaqueService } from '../../services/opaque.service';
 
 
 @Component({

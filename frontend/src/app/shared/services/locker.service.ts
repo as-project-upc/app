@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Client } from './opaque-client.service';
-import { OpaqueService } from '../../auth/services/opaque.service';
+import { OpaqueService } from '../../services/opaque.service';
 
 @Injectable({ providedIn: 'root' })
 export class LockerService {
@@ -88,7 +88,7 @@ export class LockerService {
     return res.json();
   }
 
-  async downloadFile(fileName: string) {
+  async downloadEncryptedBlob(fileName: string): Promise<Blob> {
     if (!this.client) throw new Error('Client not initialized');
 
     const res = await fetch(`${this.baseUrl}/api/locker/${fileName}`, {
@@ -96,26 +96,30 @@ export class LockerService {
       headers: { Authorization: `Bearer ${this.client.token}` },
     });
 
-    const blob = await res.blob();
-    return URL.createObjectURL(blob);
+    const encrypted = new Uint8Array(await res.arrayBuffer());
+
+    const decrypted = await this.client.decryptData(encrypted);
+
+    return new Blob([decrypted], { type: "image/jpeg" });
   }
 
+
   async uploadFile(file: File, filename: string) {
-  if (!this.client) throw new Error('Client not initialized');
+    if (!this.client) throw new Error('Client not initialized');
 
-  const formData = new FormData();
-  formData.append('file', file, filename);
+    const formData = new FormData();
+    formData.append('file', file, filename);
 
-  const res = await fetch(`${this.baseUrl}/api/locker/${filename}`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${this.client.token}`,
-    },
-    body: formData,
-  });
+    const res = await fetch(`${this.baseUrl}/api/locker/${filename}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${this.client.token}`,
+      },
+      body: formData,
+    });
 
-  return res.json();
-}
+    return res.json();
+  }
 
 
 }
