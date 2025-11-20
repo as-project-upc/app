@@ -26,6 +26,7 @@ export class Dashboard {
   ) { }
   reminders: any = [];
   appointments: any = [];
+  doctors: any = [];
   pets: any = [];
   lockerData: any;
   role: any;
@@ -33,6 +34,7 @@ export class Dashboard {
   ngOnInit() {
     this.role = this.authService.role;
     this.getAllPets();
+    this.getAllDoctors();
     this.getAllAppointments();
     this.getAllReminders();
   }
@@ -52,8 +54,35 @@ export class Dashboard {
     }
   }
 
-  async getAllAppointments() {
-    this.appointmentService.listAppointments().subscribe(res => console.log(res));
+  getAllAppointments() {
+    this.appointmentService.listAppointments().subscribe({
+      next: (data) => {
+        this.appointments = data.map((a: any) => {
+          const d = new Date(a.date);
+
+          return {
+            ...a,
+            date: d.toLocaleDateString(),
+            time: d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          };
+        });
+      },
+      error: (err) => console.error('Error loading appointments:', err)
+    });
+  }
+
+  getAllDoctors() {
+    this.appointmentService.listDoctors().subscribe({
+      next: (data) => {
+        this.doctors = data;
+      },
+      error: (err) => console.error('Error loading doctors:', err)
+    });
+  }
+
+  getDoctorName(id: any) {
+    const doc = this.doctors.find((d: any) => d.id === id);
+    return doc ? doc.username : 'Unknown';
   }
 
   async getAllReminders() {
