@@ -7,6 +7,8 @@ export const login_or_register = async (username: string, email: string, passwor
     console.log("register")
     const registerResponse = await client.register(
       username,
+      "name",
+      "surname",
       email,
       password,
       role

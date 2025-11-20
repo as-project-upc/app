@@ -2,6 +2,8 @@ import {client, ready} from "@serenity-kit/opaque";
 
 export interface RegistrationStartRequest {
   username: string;
+  name: string;
+  surname: string;
   email: string;
   registration_request: string;
 }
@@ -49,7 +51,7 @@ export class Client {
     this.initialized = ready;
   }
   
-  async register(username: string, email: string, password: string, role: 'user' | 'admin' | 'doctor'): Promise<LoginResponse> {
+  async register(username: string, name: string, surname: string, email: string, password: string, role: 'user' | 'admin' | 'doctor'): Promise<LoginResponse> {
     await this.initialized;
     
     const {clientRegistrationState, registrationRequest} = client.startRegistration({password});
@@ -82,6 +84,8 @@ export class Client {
       body: JSON.stringify({
         username,
         email,
+        name,
+        surname,
         registration_record: registrationRecord,
         role,
       } as RegistrationFinishRequest),

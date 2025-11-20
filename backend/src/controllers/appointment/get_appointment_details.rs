@@ -1,10 +1,10 @@
+use crate::domain::error::ApiError;
 use crate::domain::result::ApiResult;
 use crate::repository::appointments::Appointment;
 use crate::utils::Claims;
 use axum::extract::State;
 use axum::{Extension, Json};
 use sqlx::SqlitePool;
-use crate::domain::error::ApiError;
 
 pub async fn get_appointment(
     State(pool): State<SqlitePool>,

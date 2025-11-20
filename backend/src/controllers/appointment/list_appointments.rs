@@ -25,7 +25,7 @@ pub async fn list_appointments(
         })?;
 
     let appointments = appointment_repo
-        .get_by_username(&user_id)
+        .get_by_user_id(&user_id)
         .await
         .map_err(|_| crate::domain::error::ApiError::DatabaseError)?;
 

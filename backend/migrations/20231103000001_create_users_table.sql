@@ -2,6 +2,8 @@ CREATE TABLE IF NOT EXISTS users
 (
     id            TEXT     NOT NULL PRIMARY KEY,
     username      TEXT     NOT NULL UNIQUE,
+    name          TEXT     NOT NULL,
+    surname       TEXT     NOT NULL,
     password_file BLOB     NOT NULL,
     email         TEXT     NOT NULL UNIQUE,
     role          TEXT     NOT NULL DEFAULT 'user',

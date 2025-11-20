@@ -15,6 +15,8 @@ pub struct RegisterResponse {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct RegistrationFinishRequest {
     pub username: String,
+    pub name: String,
+    pub surname: String,
     pub email: String,
     #[serde(with = "base64_serde")]
     pub registration_record: Vec<u8>,
@@ -30,6 +32,7 @@ pub async fn register_finish_handler(
             field: "username or email".to_string(),
         });
     }
+    dbg!(&request);
 
     if !request.email.contains('@') {
         return Err(ApiError::InvalidEmail);
@@ -41,6 +44,8 @@ pub async fn register_finish_handler(
     match user_repo
         .create_user(
             request.username.clone(),
+            request.name.clone(),
+            request.surname.clone(),
             request.email.clone(),
             password_file,
             request.role,

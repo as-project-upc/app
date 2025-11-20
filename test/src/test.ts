@@ -12,6 +12,8 @@ async function main() {
     console.log("register")
     const registerResponse = await client.register(
       username,
+      "name",
+      "surname",
       email,
       password,
       'admin'
@@ -48,17 +50,6 @@ async function main() {
     console.log("admin endpoint")
     
     const res = await fetch("http://localhost:3000/api/admin", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      }
-    })
-    const res2Json = await res.json();
-    
-    console.log(JSON.stringify(res2Json, null, 2));
-  }
-  {
-    console.log("user endpoint")
-    const res = await fetch("http://localhost:3000/api/user", {
       headers: {
         Authorization: `Bearer ${token}`,
       }

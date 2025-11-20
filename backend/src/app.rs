@@ -58,7 +58,6 @@ impl App {
             .route_layer(middleware::from_fn(auth_middleware));
 
         let user_routes = Router::new()
-            .route("/user", get(controllers::user::handler))
             .route("/doctors", get(controllers::doctor::handler))
             .route(
                 "/appointment",

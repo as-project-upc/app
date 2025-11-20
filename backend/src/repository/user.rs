@@ -15,19 +15,23 @@ impl UserRepository {
     pub async fn create_user(
         &self,
         username: String,
+        name: String,
+        surname: String,
         email: String,
         password_file: Vec<u8>,
         role: Role,
     ) -> Result<UserDto, sqlx::Error> {
         let user = sqlx::query(
             r#"
-            INSERT INTO users (id,username, password_file, email, role)
-            VALUES (?,?, ?, ?, ?)
-            RETURNING id, username, password_file, email, role
+            INSERT INTO users (id,username, name, surname,password_file, email, role)
+            VALUES (?,?, ?, ?, ?, ?, ?)
+            RETURNING id, username, name, surname, password_file, email, role
             "#,
         )
         .bind(&uuid::Uuid::now_v7().to_string())
         .bind(&username)
+        .bind(&name)
+        .bind(&surname)
         .bind(&password_file)
         .bind(&email)
         .bind(&role.to_string())
@@ -39,7 +43,7 @@ impl UserRepository {
 
     pub async fn get_by_username(&self, username: &str) -> Result<Option<UserDto>, sqlx::Error> {
         let user = sqlx::query(
-            "SELECT id, username, password_file, email, role FROM users WHERE username = ?",
+            "SELECT id, username, name, surname, password_file, email, role FROM users WHERE username = ?",
         )
         .bind(username)
         .fetch_optional(&self.pool)
@@ -51,7 +55,7 @@ impl UserRepository {
     }
     pub async fn get_by_id(&self, id: &str) -> Result<Option<UserDto>, sqlx::Error> {
         let user =
-            sqlx::query("SELECT id, username, password_file, email, role FROM users WHERE id = ?")
+            sqlx::query("SELECT id, username, name, surname, password_file, email, role FROM users WHERE id = ?")
                 .bind(id)
                 .fetch_optional(&self.pool)
                 .await?
@@ -63,7 +67,7 @@ impl UserRepository {
 
     pub async fn get_doctors(&self) -> Result<Vec<UserDto>, sqlx::Error> {
         let users = sqlx::query(
-            "SELECT id, username, password_file, email, role FROM users where role = ?",
+            "SELECT id, username, name, surname, password_file, email, role FROM users where role = ?",
         )
         .bind("doctor")
         .fetch_all(&self.pool)
@@ -126,6 +130,8 @@ pub struct UserDto {
     pub password_file: Vec<u8>,
     pub email: String,
     pub role: Role,
+    pub name: String,
+    pub surname: String,
 }
 
 fn from_row(row: &sqlx::sqlite::SqliteRow) -> Result<UserDto, sqlx::Error> {
@@ -138,6 +144,8 @@ fn from_row(row: &sqlx::sqlite::SqliteRow) -> Result<UserDto, sqlx::Error> {
         username: row.try_get("username")?,
         password_file: row.try_get("password_file")?,
         email: row.try_get("email")?,
+        name: row.try_get("name")?,
+        surname: row.try_get("surname")?,
         role: Role::from(role_str.as_str()),
     })
 }
