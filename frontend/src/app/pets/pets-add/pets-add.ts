@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { AngularMaterialModule } from '../ang-material.module';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { LockerService } from '../shared/services/locker.service';
 import { MatDialogRef } from '@angular/material/dialog';
-import { ModalDialog } from '../modal-dialog/modal-dialog';
-import { v4 as uuidv4} from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
+import { AngularMaterialModule } from '../../ang-material.module';
+import { ModalDialog } from '../../modal-dialog/modal-dialog';
+import { LockerService } from '../../shared/services/locker.service';
 
 @Component({
   selector: 'app-pets-add',
@@ -18,10 +18,11 @@ export class PetsAdd {
   @Output() petAdded = new EventEmitter<void>();
 
   speciesList = [
-    'Labrador Retriever', 'German Shepherd', 'Golden Retriever', 'Bulldog',
-    'Beagle', 'Poodle', 'Rottweiler', 'Yorkshire Terrier', 'Boxer',
-    'Dachshund', 'Husky', 'Doberman', 'Shih Tzu', 'Pomeranian', 'Chihuahua'
+    'Labrador Retriever','German Shepherd','Golden Retriever','Bulldog',
+    'Beagle','Poodle','Rottweiler','Yorkshire Terrier','Boxer',
+    'Dachshund','Husky','Doberman','Shih Tzu','Pomeranian','Chihuahua'
   ];
+
   imagePreview?: string;
   selectedFile?: File;
 
@@ -29,7 +30,7 @@ export class PetsAdd {
     private fb: FormBuilder,
     private lockerService: LockerService,
     private dialogRef: MatDialogRef<ModalDialog>
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.petForm = this.fb.group({
@@ -51,12 +52,11 @@ export class PetsAdd {
     }
   }
 
-
   async savePet() {
     if (this.petForm.invalid) return;
 
+    // Load existing pet list
     let existingPets: any;
-
     try {
       const fileStr = await this.lockerService.downloadEncryptedFile('pet_list');
       existingPets = fileStr ? JSON.parse(fileStr) : {};
@@ -66,13 +66,20 @@ export class PetsAdd {
 
     existingPets.pets ??= [];
 
-    const petCount = existingPets.pets.length;
-
     let imageLockerId = '';
+    let uploadedFileName = '';
+
     if (this.selectedFile) {
-      const lockerId = this.petForm.get('name')?.value
-      await this.lockerService.uploadFile(this.selectedFile, lockerId);
-      imageLockerId = lockerId;
+      const safeName = this.petForm.get('name')?.value.replace(/\s+/g, '_');
+      const uniqueImageId = `${safeName}_${uuidv4()}`;
+
+      await this.lockerService.uploadEncryptedFileBlob(
+        this.selectedFile,
+        uniqueImageId
+      );
+
+      imageLockerId = uniqueImageId;
+      uploadedFileName = this.selectedFile.name;
     }
 
     const petData = this.petForm.value;
@@ -85,19 +92,17 @@ export class PetsAdd {
       notes: petData.notes,
       image: imageLockerId
         ? {
-          filename: this.selectedFile?.name,
-          lockerId: imageLockerId,
-          uploadedAt: new Date().toISOString()
-        }
+            lockerId: imageLockerId,
+            originalName: uploadedFileName,
+            uploadedAt: new Date().toISOString()
+          }
         : null,
       nextAppt: '',
       reminders: [],
       appointments: []
     };
 
-    if (existingPets.pets.length >= 0) {
-      await this.lockerService.deleteFile('pet_list');
-    }
+    await this.lockerService.deleteFile('pet_list');
 
     existingPets.pets.push(petJson);
 
@@ -105,9 +110,12 @@ export class PetsAdd {
       'pet_list',
       JSON.stringify(existingPets)
     );
+
     this.petAdded.emit();
     this.dialogRef.close({ saved: true });
   }
 
-
+  closeDialog() {
+    this.dialogRef.close();
+  }
 }

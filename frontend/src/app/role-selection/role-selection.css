@@ -1,0 +1,33 @@
+.role-selection-container {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.role-cards {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.role-card {
+  width: 220px;
+  padding: 20px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: 0.3s;
+  text-align: center;
+}
+
+.role-card img {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+}
+
+.role-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+}

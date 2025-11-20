@@ -4,37 +4,43 @@ import { Router, RouterModule } from '@angular/router';
 import { ModalDialog } from '../modal-dialog/modal-dialog';
 import { MatDialog } from '@angular/material/dialog';
 import { LockerService } from '../shared/services/locker.service';
-import { OpaqueService } from '../auth/services/opaque.service';
+import { OpaqueService } from '../services/opaque.service';
+import { AppointmentService } from '../services/appointments.service';
 
 @Component({
   selector: 'app-dashboard',
   imports: [AngularMaterialModule, RouterModule],
   templateUrl: './dashboard.html',
-  styleUrl: './dashboard.css'
+  styleUrl: './dashboard.css',
 })
 export class Dashboard {
-
   selectedRequestType: string = '';
-  constructor(private dialog: MatDialog,
+
+  constructor(
+    private dialog: MatDialog,
     private lockerService: LockerService,
+    private appointmentService: AppointmentService,
     private authService: OpaqueService,
     private cd: ChangeDetectorRef,
-    private zone: NgZone) { }
+    private zone: NgZone
+  ) { }
   reminders: any = [];
   appointments: any = [];
+  doctors: any = [];
   pets: any = [];
   lockerData: any;
   role: any;
 
   ngOnInit() {
-    this.role = this.authService.role
+    this.role = this.authService.role;
     this.getAllPets();
+    this.getAllDoctors();
     this.getAllAppointments();
     this.getAllReminders();
   }
 
-  visiblePets = 0; // current slide index
-  maxVisible = 3;  // how many cards per view (adjustable)
+  visiblePets = 0;
+  maxVisible = 3;
 
   nextSlide() {
     if (this.visiblePets < this.pets.length - this.maxVisible) {
@@ -48,42 +54,36 @@ export class Dashboard {
     }
   }
 
-  async getAllAppointments() {
-    try {
-      const res = await this.lockerService.downloadEncryptedFile('appointment_list');
+  getAllAppointments() {
+    this.appointmentService.listAppointments().subscribe({
+      next: (data) => {
+        this.appointments = data.map((a: any) => {
+          const d = new Date(a.date);
 
-      if (res) {
-        this.lockerData = JSON.parse(res);
-
-        this.zone.run(() => {
-          this.appointments = this.lockerData.appointments
-            .map((a: any) => ({
-              id: a.id,
-              date: a.date,
-              time: a.time,
-              pet: a.pet,
-              virtual: a.virtual || false,
-              status: a.status || 'pending'
-            }))
-            // Sort newest first (by date and time)
-            .sort((a: any, b: any) => {
-              const dateA = new Date(`${a.date}T${a.time || '00:00'}`);
-              const dateB = new Date(`${b.date}T${b.time || '00:00'}`);
-              return dateB.getTime() - dateA.getTime();
-            })
-            // Take top 5
-            .slice(0, 5);
-
-          this.cd.detectChanges();
+          return {
+            ...a,
+            date: d.toLocaleDateString(),
+            time: d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          };
         });
-
-      }
-    } catch (err) {
-      console.error('Error fetching appointments from locker', err);
-      this.appointments = [];
-    }
+      },
+      error: (err) => console.error('Error loading appointments:', err)
+    });
   }
 
+  getAllDoctors() {
+    this.appointmentService.listDoctors().subscribe({
+      next: (data) => {
+        this.doctors = data;
+      },
+      error: (err) => console.error('Error loading doctors:', err)
+    });
+  }
+
+  getDoctorName(id: any) {
+    const doc = this.doctors.find((d: any) => d.id === id);
+    return doc ? doc.username : 'Unknown';
+  }
 
   async getAllReminders() {
     try {
@@ -107,7 +107,6 @@ export class Dashboard {
 
           this.cd.detectChanges();
         });
-
       }
     } catch (err) {
       console.error('Error fetching reminders from locker', err);
@@ -115,25 +114,25 @@ export class Dashboard {
     }
   }
 
-
   async getAllPets() {
     try {
       const res = await this.lockerService.downloadEncryptedFile('pet_list');
-      const r = await this.lockerService.downloadFile('pet0');
+
       if (res) {
         this.lockerData = JSON.parse(res);
+
         this.zone.run(() => {
           this.pets = this.lockerData.pets.map((p: any) => ({
             id: p.id,
             name: p.name,
             breed: p.breed,
             nextAppt: p.nextAppt || 'No appointments',
-            image: p.image
-              ? false
-              : '../../assets/images/dog.jpg',
+            imageLockerId: p.image?.lockerId || null,
           }));
+          this.loadAllPetImages();
           this.cd.detectChanges();
         });
+
       }
     } catch (err) {
       console.error('Error fetching pets from locker', err);
@@ -141,25 +140,48 @@ export class Dashboard {
     }
   }
 
-onAddPet() {
-  this.selectedRequestType = "Add Pet";
+  async loadAllPetImages() {
+    for (let pet of this.pets) {
+      if (!pet.imageLockerId) {
+        pet.imageUrl = null;
+        continue;
+      }
 
-  const dialogRef = this.dialog.open(ModalDialog, {
-    panelClass: 'custom-dialog-panel',
-    data: { mode: this.selectedRequestType }
-  });
+      try {
+        const blob = await this.lockerService.downloadEncryptedBlob(pet.imageLockerId);
+        // Now it's valid
+        pet.imageUrl = URL.createObjectURL(blob);
 
-  dialogRef.afterClosed().subscribe(result => {
-    if (result?.saved || result?.refresh) {
-      this.getAllPets(); // Refresh pet list after add
+      } catch (err) {
+        console.error("Failed to load image for", pet.name, err);
+        pet.imageUrl = null;
+      }
     }
-  });
-}
+
+    this.cd.detectChanges();
+  }
+
+
+
+  onAddPet() {
+    this.selectedRequestType = 'Add Pet';
+
+    const dialogRef = this.dialog.open(ModalDialog, {
+      panelClass: 'custom-dialog-panel',
+      data: { mode: this.selectedRequestType },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result?.saved || result?.refresh) {
+        this.getAllPets(); // Refresh pet list after add
+      }
+    });
+  }
 
   getPetDetails(petId: number) {
-    this.selectedRequestType = "Pet Details";
+    this.selectedRequestType = 'Pet Details';
 
-    const selectedPet = this.lockerData.pets.find((p: any) => p.id === petId);
+    const selectedPet = this.pets.find((p: any) => p.id === petId);
     if (!selectedPet) {
       console.error('Pet not found with ID:', petId);
       return;
@@ -167,7 +189,7 @@ onAddPet() {
 
     const dialogRef = this.dialog.open(ModalDialog, {
       panelClass: 'custom-dialog-panel',
-      data: { mode: this.selectedRequestType, pet: selectedPet }
+      data: { mode: this.selectedRequestType, pet: selectedPet },
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -176,5 +198,4 @@ onAddPet() {
       }
     });
   }
-
 }

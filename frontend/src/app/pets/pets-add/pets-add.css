@@ -1,0 +1,148 @@
+.add-pet-form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.06);
+
+  /* FIXED WIDTH FOR A CLEAN CENTERED MODAL */
+  width: 480px;
+  max-width: 90vw; /* prevents overflow on small screens */
+  margin: 0 auto;
+}
+
+.actions-card-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;   /* pushes title left, close btn right */
+  padding: 16px 20px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+/* Title */
+.form-title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 22px;
+  color: #2c2c2c;
+}
+
+/* Material fields */
+.full-field {
+  width: 100%;
+}
+
+.mat-form-field {
+  background: #f7f7f7 !important;
+  border-radius: 12px !important;
+  padding: 2px 10px;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline {
+  border-radius: 12px !important;
+}
+
+/* Upload Section */
+.upload-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.upload-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #444;
+}
+
+/* Fancy upload area */
+.upload-box {
+  border: 2px dashed #cfcfcf;
+  border-radius: 12px;
+  padding: 22px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.25s;
+  font-size: 14px;
+  color: #555;
+  background: #fafafa;
+}
+
+.upload-box:hover {
+  border-color: #63B174;
+  background: #f4fff7;
+}
+
+.upload-box input {
+  display: none;
+}
+
+/* Image Preview */
+.image-preview-box {
+  margin-top: 10px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 10px;
+  width: 160px;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fafafa;
+}
+
+.image-preview-box img {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 10px;
+}
+
+/* Button Row */
+.submit-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+/* Save Button */
+.save-btn {
+  background: #63B174 !important;
+  color: #fff !important;
+  padding: 10px 26px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-transform: none;
+  font-size: 14px;
+  transition: 0.3s ease;
+}
+
+.save-btn:hover {
+  background: #559C64 !important;
+}
+
+.save-btn:disabled {
+  background: #b7dfc7 !important;
+  color: #ffffff !important;
+  cursor: not-allowed;
+}
+
+.circle-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid #dcdcdc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: #fff;
+  transition: 0.2s;
+}
+
+.circle-btn:hover {
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}

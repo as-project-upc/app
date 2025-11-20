@@ -1,29 +1,33 @@
 <div class="side-panel" [class.open]="openPanel">
-  <h3>Add New Appointment</h3>
+  <div class="panel-header">
+    <h3>Add New Appointment</h3>
+    <button class="close-btn" type="button" (click)="closePanel()">×</button>
+  </div>
 
-  <form [formGroup]="appointmentForm" (ngSubmit)="saveAppointment()">
+  <form [formGroup]="appointmentForm" (ngSubmit)="saveAppointment()" class="panel-form">
 
-    <label>Pet:</label>
-    <input type="text" formControlName="pet" required>
+    <div class="form-group">
+      <label>Doctor</label>
+      <select formControlName="doctor_id" required>
+        <option *ngFor="let d of doctors" [value]="d.id">
+          {{ d.username }}
+        </option>
+      </select>
+    </div>
 
-    <label>Date:</label>
-    <input type="date" formControlName="date" required>
+    <div class="form-group">
+      <label>Date</label>
+      <input type="date" formControlName="date" required>
+    </div>
 
-    <label>Time:</label>
-    <input type="time" formControlName="time" required>
+    <div class="form-group">
+      <label>Time</label>
+      <input type="time" formControlName="time" required>
+    </div>
 
-    <label>Virtual:</label>
-    <input type="checkbox" formControlName="virtual">
-
-    <label>Status:</label>
-    <select formControlName="status" required>
-      <option value="confirmed">Confirmed</option>
-      <option value="cancelled">Cancelled</option>
-    </select>
-
-    <div class="buttons">
-      <button type="submit" [disabled]="appointmentForm.invalid">Save</button>
-      <button type="button" (click)="closePanel()">Close</button>
+    <div class="panel-buttons">
+      <button class="save-btn" type="submit" [disabled]="appointmentForm.invalid">Save</button>
+      <button class="cancel-btn" type="button" (click)="closePanel()">Cancel</button>
     </div>
   </form>
 </div>

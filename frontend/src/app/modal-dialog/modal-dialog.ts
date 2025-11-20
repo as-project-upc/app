@@ -1,8 +1,8 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AngularMaterialModule } from '../ang-material.module';
-import { PetsAdd } from "../pets-add/pets-add";
-import { PetsDetails } from "../pets-details/pets-details";
+import { PetsAdd } from '../pets/pets-add/pets-add';
+import { PetsDetails } from '../pets/pets-details/pets-details';
 
 @Component({
   selector: 'app-modal-dialog',

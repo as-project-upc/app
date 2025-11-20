@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Client } from '../../shared/services/opaque-client.service';
+import { Client } from '../shared/services/opaque-client.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,9 +14,9 @@ export class OpaqueService {
     this.client = new Client('http://localhost:3000'); // backend URL
   }
 
-  async register(username: string, email: string, password: string, role: string) {
+  async register(username: string, email: string, password: string, role: any) {
     try {
-      const response = await this.client.register(username, email, password, 'user');
+      const response = await this.client.register(username, email, password, role);
       return response;
     } catch (err) {
       console.error('Registration error:', err);

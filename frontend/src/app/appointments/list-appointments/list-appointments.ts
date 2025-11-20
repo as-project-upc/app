@@ -4,6 +4,7 @@ import { AngularMaterialModule } from '../../ang-material.module';
 import { LockerService } from '../../shared/services/locker.service';
 import { ConfirmDialogService } from '../../shared/services/confirm-dialog.service';
 import { NotificationService } from '../../shared/services/notification.service';
+import { AppointmentService } from '../../services/appointments.service';
 
 @Component({
   selector: 'app-list-appointments',
@@ -12,16 +13,16 @@ import { NotificationService } from '../../shared/services/notification.service'
   styleUrl: './list-appointments.css'
 })
 export class ListAppointments {
-  showPanel: boolean = false;
-  lockerData: any;
+  showPanel = false;
   appointments: any = [];
-  constructor(private lockerService: LockerService,
-    private cd: ChangeDetectorRef,
-    private zone: NgZone,
-    private confirmDialog: ConfirmDialogService,
-    private notify: NotificationService) { }
+  doctors: any = [];
+
+  constructor(
+    private appointmentService: AppointmentService,
+  ) {}
 
   ngOnInit() {
+    this.getAllDoctors();        // MUST load doctors first
     this.getAllAppointments();
   }
 
@@ -30,69 +31,50 @@ export class ListAppointments {
     this.showPanel = false;
   }
 
-  async getAllAppointments() {
-    try {
-      const res = await this.lockerService.downloadEncryptedFile('appointment_list');
+  getAllAppointments() {
+    this.appointmentService.listAppointments().subscribe({
+      next: (data) => {
+        this.appointments = data.map((a: any) => {
+          const d = new Date(a.date);
 
-      if (res) {
-        this.lockerData = JSON.parse(res);
-
-        this.zone.run(() => {
-          this.appointments = this.lockerData.appointments.map((a: any) => ({
-            id: a.id,
-            date: a.date,
-            time: a.time,
-            pet: a.pet,
-            virtual: a.virtual || false,
-            status: a.status || 'pending'
-          }));
-
-          this.cd.detectChanges();
+          return {
+            ...a,
+            date: d.toLocaleDateString(),
+            time: d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          };
         });
-
-        console.log('Loaded appointments:', this.appointments);
-      }
-    } catch (err) {
-      console.error('Error fetching appointments from locker', err);
-      this.appointments = [];
-    }
+      },
+      error: (err) => console.error('Error loading appointments:', err)
+    });
   }
 
-  deleteAppointment(appointmentId: string) {
-    // const confirmed = this.confirmDialog.confirm(
-    //   'Are you sure you want to delete this appointment?',
-    //   'Delete Appointment'
-    // );
-
-    // if (!confirmed) return;
-    this.appointments = this.appointments.filter((a: any) => a.id !== appointmentId);
-    // Optional: If you store appointments in locker, also update locker
-    this.saveAppointmentsToLocker();
+  getAllDoctors() {
+    this.appointmentService.listDoctors().subscribe({
+      next: (data) => {
+        this.doctors = data;
+      },
+      error: (err) => console.error('Error loading doctors:', err)
+    });
   }
 
-  async saveAppointmentsToLocker() {
-    try {
-      const data = { appointments: this.appointments };
-
-      await this.lockerService.deleteFile('appointment_list');
-
-      // Upload updated appointments
-      await this.lockerService.uploadEncryptedFile(
-        'appointment_list',
-        JSON.stringify(data)
-      );
-      this.notify.showSuccess(
-        "File uploaded",
-        "Your encrypted file has been uploaded successfully."
-      );
-    } catch (err) {
-      this.notify.showError(
-        "Upload failed",
-        "Could not upload your encrypted file."
-      );
-      console.error('Error saving appointments', err);
-    }
+  getDoctorName(id: any) {
+    const doc = this.doctors.find((d: any) => d.id === id);
+    return doc ? doc.username : 'Unknown';
   }
 
+  deleteAppointment(appointmentId: any) {
+    this.appointmentService.deleteAppointment(appointmentId).subscribe({
+      next: (data) => {
+        if (data) {
+          this.getAllAppointments();
+        }
+      },
+      error: (err) => console.error('Error:', err)
+    });
+  }
 
+  refreshPage(){
+    this.getAllAppointments();
+    this.showPanel = false;
+  }
 }

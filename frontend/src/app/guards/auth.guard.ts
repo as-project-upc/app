@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
-import { OpaqueService } from '../auth/services/opaque.service';
+import { OpaqueService } from '../services/opaque.service';
 
 interface JwtPayload {
   username: string,

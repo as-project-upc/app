@@ -8,49 +8,41 @@
     <table class="custom-table full">
       <thead>
         <tr>
+          <th>Doctor</th>
           <th>Date</th>
           <th>Time</th>
-          <th>Pet</th>
-          <th>Virtual</th>
-          <th>Status</th>
-          <th style="width: 180px;">Actions</th>
+          <th style="width: 120px;">Actions</th>
         </tr>
       </thead>
 
       <tbody>
         @if (appointments.length > 0) {
-    @for (a of appointments; track a) {
-      <tr>
-        <td>{{ a.date }}</td>
-        <td>{{ a.time }}</td>
-        <td>{{ a.pet }}</td>
-        <td>
-          <img *ngIf="a.virtual" src="../../assets/icons/camera.svg" class="icon">
-        </td>
-        <td>
-          <span
-            [class.confirmed]="a.status === 'confirmed'"
-            [class.cancelled]="a.status === 'cancelled'">
-            {{ a.status }}
-          </span>
-        </td>
-        <td class="actions">
-          <img src="../../../assets/icons/delete.svg" alt="delete" class="edit-icon" (click)="deleteAppointment(a.id)"/>
-        </td>
-      </tr>
-    }
-  } @else {
-    <tr>
-      <td colspan="12" class="no-data">
-        No appointments found
-      </td>
-    </tr>
-  }
+          @for (a of appointments; track a) {
+            <tr>
+              <td>{{ getDoctorName(a.doctor_id) }}</td>
+              <td>{{ a.date }}</td>
+              <td>{{ a.time }}</td>
+              <td class="actions">
+                <img src="../../../assets/icons/delete.svg"
+                     alt="delete"
+                     class="edit-icon"
+                     (click)="deleteAppointment(a.appointment_id)" />
+              </td>
+            </tr>
+          }
+        } @else {
+          <tr>
+            <td colspan="4" class="no-data">
+              No appointments found
+            </td>
+          </tr>
+        }
       </tbody>
     </table>
   </div>
 
-  <app-create-appointment [openPanel]="showPanel" (panelClosed)="showPanel=false"
-    (appointmentSaved)="handleSave($event)">
+  <app-create-appointment
+    [openPanel]="showPanel"
+    (panelClosed)="refreshPage()">
   </app-create-appointment>
 </div>

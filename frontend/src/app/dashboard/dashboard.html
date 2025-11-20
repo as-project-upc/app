@@ -46,30 +46,27 @@
       <table class="custom-table">
         <thead>
           <tr>
+            <th>Doctor</th>
             <th>Date</th>
             <th>Time</th>
-            <th>Pet</th>
-            <th>Virtual</th>
-            <th>Action</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let a of appointments">
-            <td>{{ a.date }}</td>
-            <td>{{ a.time }}</td>
-            <td>{{ a.pet }}</td>
-
-            <td>
-              @if (a.virtual) {
-              <img src="../../assets/icons/camera.svg" alt="edit" class="edit-icon" />
-              }
-            </td>
-
-            <td>
-              <button *ngIf="a.status === 'cancel'" class="cancel-btn">Cancel Appointment?</button>
-              <button *ngIf="a.status === 'confirmed'" class="confirmed-btn">Confirmed</button>
+          @if (appointments.length > 0) {
+          @for (a of appointments; track a) {
+            <tr>
+              <td>{{ getDoctorName(a.doctor_id) }}</td>
+              <td>{{ a.date }}</td>
+              <td>{{ a.time }}</td>
+            </tr>
+          }
+        } @else {
+          <tr>
+            <td colspan="4" class="no-data">
+              No appointments found
             </td>
           </tr>
+        }
         </tbody>
       </table>
     </div>
@@ -96,7 +93,7 @@
       <div class="carousel-track">
 
         <div class="pet-card" *ngFor="let p of pets">
-          <img src="../../assets/images/dog.jpg" class="pet-image" />
+          <img [src]="p.imageUrl || '../../assets/images/dog.jpg'" class="pet-image">
 
           <div class="pet-info">
             <h4 class="pet-name">{{ p.name }}</h4>

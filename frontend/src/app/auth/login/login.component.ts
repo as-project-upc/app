@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } 
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { OpaqueService } from '../services/opaque.service';
+import { OpaqueService } from '../../services/opaque.service';
 
 @Component({
   selector: 'app-login',
