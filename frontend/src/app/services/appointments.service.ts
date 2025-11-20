@@ -1,47 +1,38 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+// src/app/services/appointment.service.ts
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AppointmentService {
-
   private baseUrl = 'http://localhost:3000/api';
 
   constructor(private http: HttpClient) {}
 
-private getAuthHeaders() {
-  const token = localStorage.getItem('authToken');
 
-  return new HttpHeaders({
-    'Content-Type': 'application/json',
-    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-  });
-}
-
-
-  addAppointment(userId: string, request: any) {
-    return this.http.post(
-      `${this.baseUrl}/appointment/${userId}`,
-      request,
-      { headers: this.getAuthHeaders() }
-    );
+  listDoctors(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/doctors`);
   }
 
-  listAppointments() {
-    return this.http.get(
-      `${this.baseUrl}/appointment`,
-      { headers: this.getAuthHeaders() }
-    );
+  addAppointment(doctor_id: string, datetime: string): Observable<any> {
+    const body = {
+      doctor_id: doctor_id,
+      date: datetime, // pass the datetime instead of always using now
+    };
+    return this.http.post(`${this.baseUrl}/appointment`, body);
   }
 
-  deleteAppointment(request: any) {
-    return this.http.delete(
-      `${this.baseUrl}/appointment`,
-      {
-        headers: this.getAuthHeaders(),
-        body: request
-      }
-    );
+  getAppointmentDetail(appointment_id: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/appointment/${appointment_id}`);
+  }
+
+  deleteAppointment(appointment_id: string): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/appointment/${appointment_id}`);
+  }
+
+  listAppointments(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/appointment`);
   }
 }

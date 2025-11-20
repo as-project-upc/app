@@ -37,8 +37,8 @@ export class Dashboard {
     this.getAllReminders();
   }
 
-  visiblePets = 0; // current slide index
-  maxVisible = 3; // how many cards per view (adjustable)
+  visiblePets = 0;
+  maxVisible = 3;
 
   nextSlide() {
     if (this.visiblePets < this.pets.length - this.maxVisible) {
