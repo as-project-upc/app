@@ -14,7 +14,7 @@ export interface RegistrationFinishRequest {
   username: string;
   email: string;
   registration_record: string;
-  role: 'user' | 'admin';
+  role: 'user' | 'admin' | 'doctor';
 }
 
 export interface LoginStartRequest {

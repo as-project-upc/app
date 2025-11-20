@@ -26,8 +26,7 @@ export class LockerService {
     const res = await fetch(`${this.baseUrl}/api/locker/${fileName}`, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${this.client.token}`,
-        'X-Export-Key': this.client.secretKey ? '' : '', // optional, if server requires
+        Authorization: `Bearer ${this.client.token}`
       },
       body: formData,
     });

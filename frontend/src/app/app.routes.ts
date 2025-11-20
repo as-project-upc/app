@@ -10,6 +10,7 @@ import { ListAppointments } from './appointments/list-appointments/list-appointm
 import { ListReminders } from './reminders/list-reminders/list-reminders';
 import { Doctors } from './doctors/doctors';
 import { Chat } from './chat/chat';
+import { RoleSelection } from './role-selection/role-selection';
 
 
 export const routes: Routes = [
@@ -17,6 +18,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'home', component: Home },
+  { path: 'role', component: RoleSelection },
 
   { path: '', redirectTo: 'login', pathMatch: 'full' },
 

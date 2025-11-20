@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AngularMaterialModule } from '../../ang-material.module';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { OpaqueService } from '../../services/opaque.service';
 
 
@@ -19,14 +19,23 @@ export class RegisterComponent implements OnInit {
   registrationSuccess = false;
   registrationError: string | null = null;
   token: any;
+  selectedRole: any;
   passwordStrength: string = '';
 
   constructor(private formBuilder: FormBuilder,
     private router: Router,
+    private route: ActivatedRoute,
     private opaqueService: OpaqueService
   ) {}
 
   ngOnInit(): void {
+
+    this.route.queryParams.subscribe(params => {
+    this.selectedRole = params['role'];
+    console.log('Selected role:', this.selectedRole);
+  });
+
+
     this.registerForm = this.formBuilder.group({
       username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -80,7 +89,7 @@ export class RegisterComponent implements OnInit {
         username,
         email,
         password,
-        'admin'
+        this.selectedRole
       );
       console.log('Registered:', regRes);
       this.router.navigate(['login'])
