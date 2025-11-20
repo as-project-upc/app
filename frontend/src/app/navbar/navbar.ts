@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { OpaqueService } from '../auth/services/opaque.service';
+import { OpaqueService } from '../services/opaque.service';
 import { AngularMaterialModule } from '../ang-material.module';
 
 @Component({

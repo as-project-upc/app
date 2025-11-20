@@ -9,6 +9,7 @@ import { RoleGuard } from './guards/role.guard';
 import { ListAppointments } from './appointments/list-appointments/list-appointments';
 import { ListReminders } from './reminders/list-reminders/list-reminders';
 import { Doctors } from './doctors/doctors';
+import { Chat } from './chat/chat';
 
 
 export const routes: Routes = [
@@ -27,6 +28,7 @@ export const routes: Routes = [
     children: [
       { path: 'dashboard', component: Dashboard },
       { path: 'doctors', component: Doctors },
+      { path: 'chat', component: Chat },
       { path: 'reminders', component: ListReminders },
       { path: 'appointments', component: ListAppointments },
 
