@@ -111,7 +111,9 @@ impl From<&str> for Role {
     fn from(s: &str) -> Self {
         match s {
             "admin" => Role::Admin,
-            _ => Role::User,
+            "doctor" => Role::Doctor,
+            "user" => Role::User,
+            _ => panic!("undefined"),
         }
     }
 }
