@@ -62,13 +62,18 @@ impl UserRepository {
     }
 
     pub async fn get_doctors(&self) -> Result<Vec<UserDto>, sqlx::Error> {
-        let users = sqlx::query("SELECT id, username FROM users where role = ?")
-            .bind("doctor")
-            .fetch_all(&self.pool)
-            .await?
+        let users = sqlx::query(
+            "SELECT id, username, password_file, email, role FROM users where role = ?",
+        )
+        .bind("doctor")
+        .fetch_all(&self.pool)
+        .await?;
+
+        let users = users
             .into_iter()
             .map(|user| from_row(&user))
-            .collect::<Result<Vec<UserDto>, _>>()?;
+            .collect::<Result<Vec<UserDto>, _>>()
+            .expect("Failed to map rows to UserDto");
 
         Ok(users)
     }

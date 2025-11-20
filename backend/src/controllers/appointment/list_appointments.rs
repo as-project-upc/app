@@ -2,16 +2,18 @@ use crate::domain::error::ApiError;
 use crate::domain::result::ApiResult;
 use crate::repository::appointments::{Appointment, AppointmentsRepository};
 use crate::repository::user::UserRepository;
+use crate::utils::Claims;
 use axum::extract::State;
-use axum::Json;
+use axum::{Extension, Json};
 use sqlx::SqlitePool;
 
 pub async fn list_appointments(
     State(pool): State<SqlitePool>,
-    axum::extract::Path(user_id): axum::extract::Path<String>,
+    Extension(claims): Extension<Claims>,
 ) -> ApiResult<Vec<Appointment>> {
     let user_repo = UserRepository::new(pool.clone());
     let appointment_repo = AppointmentsRepository::new(pool.clone());
+    let user_id = claims.sub;
 
     let _ = user_repo
         .get_by_id(&user_id)
