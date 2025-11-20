@@ -61,7 +61,7 @@ impl App {
             .route("/user", get(controllers::user::handler))
             .route("/doctors", get(controllers::doctor::handler))
             .route(
-                "/appointment/{user_id}",
+                "/appointment",
                 post(controllers::appointment::add_appointment),
             )
             .route(
@@ -69,10 +69,13 @@ impl App {
                 get(controllers::appointment::list_appointments),
             )
             .route(
-                "/appointment",
+                "/appointment/{appointment_id}",
                 delete(controllers::appointment::delete_appointment),
             )
-            .route_layer(middleware::from_fn(require_user))
+            .route(
+                "/appointment/{appointment_id}",
+                get(controllers::appointment::get_appointment),
+            )
             .route_layer(middleware::from_fn(auth_middleware));
 
         let admin_routes = Router::new()

@@ -48,6 +48,9 @@ pub enum ApiError {
     #[error("User not found")]
     UserNotFound,
 
+    #[error("Appointment not found")]
+    AppointmentNotFound,
+
     #[error("File not found")]
     FileNotFound,
 
@@ -85,7 +88,9 @@ impl ApiError {
 
             ApiError::UsernameExists | ApiError::EmailExists => StatusCode::CONFLICT,
 
-            ApiError::UserNotFound | ApiError::FileNotFound => StatusCode::NOT_FOUND,
+            ApiError::UserNotFound | ApiError::AppointmentNotFound | ApiError::FileNotFound => {
+                StatusCode::NOT_FOUND
+            }
 
             ApiError::DatabaseError
             | ApiError::InternalError

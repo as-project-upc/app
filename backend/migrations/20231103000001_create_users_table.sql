@@ -19,10 +19,11 @@ CREATE TABLE IF NOT EXISTS appointment
 (
     appointment_id TEXT     NOT NULL PRIMARY KEY,
     user_id        TEXT     NOT NULL,
+    doctor_id      TEXT     NOT NULL,
     date           DATETIME NOT NULL
 );
 
-CREATE INDEX IF NOT EXISTS idx_appointments_user_id ON appointment (user_id, appointment_id);
+CREATE INDEX IF NOT EXISTS idx_appointments_user_id ON appointment (user_id, doctor_id, appointment_id);
 
 
 CREATE TABLE IF NOT EXISTS server_data
