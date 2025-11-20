@@ -1,23 +1,8 @@
 .modal {
-  padding: 20px;
+  padding: 5px;
   border-radius: 4px;
   min-width: 400px
 }
 
-.actions-card-title {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;   /* pushes title left, close btn right */
-  padding: 16px 20px;
-  font-size: 20px;
-  font-weight: 600;
-  color: #333;
-  border-bottom: 1px solid #e5e5e5;
-}
-
-.edit-icon {
-  width: 18px;
-  height: 18px;
-}
 
 

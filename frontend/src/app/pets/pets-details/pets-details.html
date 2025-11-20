@@ -1,38 +1,43 @@
 <div class="pet-card">
-
-  <!-- Left: Pet Image -->
-  <div class="pet-image-section">
-    <div class="image-wrapper">
-        <img [src]="pet.imageUrl || '../../../assets/images/dog.jpg'" class="pet-image">
-    </div>
+  <div class="actions-card-title">
+    <h2 class="form-title">Add Pet</h2>
+    <button class="circle-btn" (click)="closeDialog()">
+      <img src="assets/icons/close.svg" class="edit-icon">
+    </button>
   </div>
 
-
-  <!-- Right: Pet Details (Display Only) -->
-  <div class="pet-details-section">
-
-    <div class="form-group">
-      <label>Pet Name:</label>
-      <span>{{ pet.name }}</span>
+  <div class="pet-card-body">
+    <!-- Left: Pet Image -->
+    <div class="pet-image-section">
+      <div class="image-wrapper">
+        <img [src]="pet.imageUrl || '../../../assets/images/dog.jpg'" class="pet-photo">
+        <div class="overlay">Change Image</div>
+      </div>
     </div>
 
-    <div class="form-group">
-      <label>Species:</label>
-      <span>{{ pet.breed }}</span>
+    <!-- Right: Pet Details -->
+    <div class="pet-details-section">
+      <div class="form-group">
+        <label>Pet Name:</label>
+        <span>{{ pet.name }}</span>
+      </div>
+
+      <div class="form-group">
+        <label>Species:</label>
+        <span>{{ pet.breed }}</span>
+      </div>
+
+      <div class="form-group">
+        <label>Age:</label>
+        <span>{{ pet.age }}</span>
+      </div>
+
+      <div class="form-group">
+        <label>Medical Notes:</label>
+        <span>{{ pet.notes }}</span>
+      </div>
+
+      <button class="btn delete-btn" (click)="deletePet()">Delete</button>
     </div>
-
-    <div class="form-group">
-      <label>Age:</label>
-      <span>{{ pet.age }}</span>
-    </div>
-
-    <div class="form-group">
-      <label>Medical Notes:</label>
-      <span>{{ pet.notes }}</span>
-    </div>
-
-    <button class="btn delete-btn" (click)="deletePet()">Delete</button>
-
   </div>
-
 </div>

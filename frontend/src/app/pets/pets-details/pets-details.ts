@@ -2,6 +2,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AngularMaterialModule } from '../../ang-material.module';
 import { LockerService } from '../../shared/services/locker.service';
+import { MatDialogRef } from '@angular/material/dialog';
+import { ModalDialog } from '../../modal-dialog/modal-dialog';
 
 @Component({
   selector: 'app-pets-details',
@@ -17,7 +19,9 @@ export class PetsDetails {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private lockerService: LockerService
+    private lockerService: LockerService,
+    private dialogRef: MatDialogRef<ModalDialog>
+
   ) {}
 
   ngOnInit(){
@@ -49,5 +53,9 @@ export class PetsDetails {
       this.pet.image = reader.result;
     };
     reader.readAsDataURL(file);
+  }
+
+  closeDialog() {
+    this.dialogRef.close();
   }
 }

@@ -3,7 +3,7 @@
   flex-direction: column;
   gap: 22px;
   padding: 20px;
-  border-radius: 16px;
+  border-radius: 8px;
   box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.06);
 
   /* FIXED WIDTH FOR A CLEAN CENTERED MODAL */
