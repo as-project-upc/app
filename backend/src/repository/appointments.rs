@@ -49,6 +49,19 @@ impl AppointmentsRepository {
 
         Ok(user)
     }
+    pub async fn get_by_doctor_id(&self, doctor_id: &str) -> Result<Vec<Appointment>, sqlx::Error> {
+        let user = sqlx::query(
+            "SELECT appointment_id,user_id, doctor_id, date FROM appointment WHERE doctor_id = ?",
+        )
+        .bind(doctor_id)
+        .fetch_all(&self.pool)
+        .await?
+        .into_iter()
+        .map(|row| from_row(&row))
+        .collect::<Result<Vec<_>, _>>()?;
+
+        Ok(user)
+    }
 
     pub async fn get_by_appointment_by_id(
         &self,
