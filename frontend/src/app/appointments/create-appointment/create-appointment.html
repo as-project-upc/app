@@ -10,7 +10,7 @@
       <label>Doctor</label>
       <select formControlName="doctor_id" required>
         <option *ngFor="let d of doctors" [value]="d.id">
-          {{ d.username }}
+          {{ getDoctorName(d.id) }}
         </option>
       </select>
     </div>

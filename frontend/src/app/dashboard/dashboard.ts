@@ -32,18 +32,21 @@ export class Dashboard {
   pets: any = [];
   lockerData: any;
   role: any;
+  username: any;
   currentOffset = 0;
+  currentDate = new Date();
+  currentMonth!: string;
+  currentYear!: number;
+  calendarDays: any[] = [];
 
 
   ngOnInit() {
     this.role = this.authService.role;
-    if(this.role == 'user'){
+    this.username = this.authService.username;
+    if (this.role == 'user') {
       this.getAllPets();
-      this.getAllDoctors();
     }
-    this.getAllAppointments();
-    this.getTodaysAppointments()
-    this.getTotalAppointments()
+    this.getAllDoctors();
     this.getAllReminders();
   }
 
@@ -63,42 +66,106 @@ export class Dashboard {
   }
 
   getAllAppointments() {
-    this.appointmentService.listAppointments().subscribe({
-      next: (data) => {
-        this.appointments = data.map((a: any) => {
-          const d = new Date(a.date);
+    if (this.role === 'doctor') {
+      const doc = this.doctors.find((d: any) => d.username === this.username);
+      this.appointments = doc?.appointments || [];
+    }
+    else if (this.role == 'user') {
+      this.appointmentService.listAppointments().subscribe({
+        next: (data) => {
+          this.appointments = data.map((a: any) => {
+            const d = new Date(a.date);
 
-          return {
-            ...a,
-            date: d.toLocaleDateString(),
-            time: d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-          };
-        });
-      },
-      error: (err) => console.error('Error loading appointments:', err)
-    });
+            return {
+              ...a,
+              date: d.toLocaleDateString(),
+              time: d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            };
+          });
+        },
+        error: (err) => console.error('Error loading appointments:', err)
+      });
+    }
+    this.generateCalendar();
+    this.getTodaysAppointments()
+    this.getTotalAppointments()
+  }
+
+  generateCalendar() {
+    const date = this.currentDate;
+    const year = date.getFullYear();
+    const month = date.getMonth();
+
+    this.currentYear = year;
+    this.currentMonth = date.toLocaleString("default", { month: "long" });
+
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+
+    const daysInMonth = lastDay.getDate();
+    const startIndex = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
+
+    const days: any[] = [];
+
+    for (let i = 0; i < startIndex; i++) {
+      days.push({ empty: true });
+    }
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const dateStr = new Date(year, month, d).toISOString().slice(0, 10);
+
+      const hasAppointment = this.appointments.some((a: any) =>
+        a.date.startsWith(dateStr)
+      );
+
+      days.push({
+        date: d,
+        hasAppointment
+      });
+    }
+
+    this.calendarDays = days;
+  }
+
+  nextMonth() {
+    this.currentDate = new Date(
+      this.currentDate.getFullYear(),
+      this.currentDate.getMonth() + 1,
+      1
+    );
+
+    this.generateCalendar();
+  }
+
+  prevMonth() {
+    this.currentDate = new Date(
+      this.currentDate.getFullYear(),
+      this.currentDate.getMonth() - 1,
+      1
+    );
+
+    this.generateCalendar();
   }
 
   getTodaysAppointments() {
     const today = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
-
     this.todaysAppointments = this.appointments.filter((a: any) =>
       a.date === today
     );
   }
 
-    getTotalAppointments() {
-      const today = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
-
-      this.totalAppointments = this.appointments.filter((a: any) =>
-        a.date >= today
-      ).length;
-    }
+  getTotalAppointments() {
+    const today = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
+    this.totalAppointments = this.appointments.filter((a: any) =>
+      a.date >= today
+    ).length;
+  }
 
   getAllDoctors() {
     this.appointmentService.listDoctors().subscribe({
       next: (data) => {
         this.doctors = data;
+        this.getAllAppointments();
       },
       error: (err) => console.error('Error loading doctors:', err)
     });
@@ -106,7 +173,7 @@ export class Dashboard {
 
   getDoctorName(id: any) {
     const doc = this.doctors.find((d: any) => d.id === id);
-    return doc ? doc.username : 'Unknown';
+    return doc ? 'Dr. ' + doc.name + ' ' + doc.surname : 'Unknown';
   }
 
   async getAllReminders() {

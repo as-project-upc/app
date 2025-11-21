@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AngularMaterialModule } from '../ang-material.module';
 import { AppointmentService } from '../services/appointments.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-doctors',
@@ -12,7 +13,8 @@ export class Doctors {
   doctors: any;
 
   constructor(
-    private appointmentService: AppointmentService
+    private appointmentService: AppointmentService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -29,5 +31,11 @@ export class Doctors {
       },
     });
   }
+
+  openDoctorAppointments(doctorId: string) {
+    this.router.navigate(['/appointments'], {
+    queryParams: { doctor: doctorId }
+  });
+}
 
 }

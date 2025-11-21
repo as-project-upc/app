@@ -3,15 +3,15 @@
     <img [src]="d.image || '../../assets/images/doctor_profile.jpg'" class="doctor-image" />
 
     <div class="doctor-info">
-      <h4 class="doctor-name">{{ d.username }}</h4>
+      <h4 class="doctor-name">Dr. {{d.name + " " + d.surname}}</h4>
     </div>
 
     <div class="doctor-actions">
-      <button class="circle-btn">
+      <!-- <button class="circle-btn">
         <img src="assets/icons/info.svg" class="edit-icon" />
-      </button>
+      </button> -->
 
-      <button class="circle-btn">
+      <button class="circle-btn" (click)="openDoctorAppointments(d.id)">
         <img src="assets/icons/calendar.svg" class="edit-icon" />
       </button>
     </div>

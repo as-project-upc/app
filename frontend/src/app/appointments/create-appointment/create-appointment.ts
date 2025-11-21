@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AngularMaterialModule } from '../../ang-material.module';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AppointmentService } from '../../services/appointments.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-create-appointment',
@@ -15,16 +16,24 @@ export class CreateAppointment {
   @Output() panelClosed = new EventEmitter<void>();
   appointmentForm!: FormGroup;
   doctors: any;
+  selectedDoctorId: any = "";
 
   constructor(
     private fb: FormBuilder,
-    private appointmentService: AppointmentService
+    private appointmentService: AppointmentService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
     this.getAllDoctors();
+    this.route.queryParams.subscribe(params => {
+      this.selectedDoctorId = params['doctor'];
+      if(this.selectedDoctorId){
+        this.openPanel = true;
+      }
+    });
     this.appointmentForm = this.fb.group({
-      doctor_id: ['', Validators.required],
+      doctor_id: [this.selectedDoctorId, Validators.required],
       date: ['', Validators.required],
       time: ['', Validators.required]
     });
@@ -44,6 +53,11 @@ export class CreateAppointment {
         console.error('Error loading doctors:', err);
       },
     });
+  }
+
+  getDoctorName(id: any) {
+    const doc = this.doctors.find((d: any) => d.id === id);
+    return doc ? 'Dr. ' + doc.name + ' ' + doc.surname : 'Unknown';
   }
 
   saveAppointment() {
