@@ -68,7 +68,7 @@ export class Client {
     return true;
   }
 
-  async register(username: string, email: string, password: string, role: 'user' | 'admin'): Promise<LoginResponse> {
+  async register(username: string, name: string, surname: string, email: string, password: string, role: 'user' | 'admin'): Promise<LoginResponse> {
     await this.initialized;
 
     const {clientRegistrationState, registrationRequest} = client.startRegistration({password});
@@ -78,6 +78,8 @@ export class Client {
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
         username,
+        name,
+        surname,
         email,
         registration_request: registrationRequest,
       } as RegistrationStartRequest),
@@ -100,6 +102,8 @@ export class Client {
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
         username,
+        name,
+        surname,
         email,
         registration_record: registrationRecord,
         role,

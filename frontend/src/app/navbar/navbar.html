@@ -4,31 +4,31 @@
       <img src="../../assets/icons/pet-icon.svg" alt="edit" class="edit-icon" /> GuardPaw
     </div>
 
+    @if(role =='user'){
     <p routerLink="/doctors" routerLinkActive="active" class="gp-nav-link">
-    Doctors
-  </p>
+      Doctors
+    </p>
+    <p routerLink="/appointments" routerLinkActive="active" class="gp-nav-link">
+      Appointments
+    </p>
+    }
 
-  <p routerLink="/appointments" routerLinkActive="active" class="gp-nav-link">
-    Appointments
-  </p>
-  <p routerLink="/chat" routerLinkActive="active" class="gp-nav-link">
-    Chats
-  </p>
+    <p routerLink="/chat" routerLinkActive="active" class="gp-nav-link">
+      Chats
+    </p>
 
   </div>
 
   <div class="gp-right">
-  <div class="profile-wrapper">
-    <img src="../../assets/icons/profile-circle.svg"
-         alt="profile"
-         class="profile-icon" />
+    <div class="profile-wrapper">
+      <img src="../../assets/icons/profile-circle.svg" alt="profile" class="profile-icon" />
 
-    <div class="profile-dropdown">
-      <p class="dropdown-item" >{{email}}</p>
-      <p class="dropdown-item" >{{role}}</p>
-      <a class="dropdown-item" (click)="logout()">Logout</a>
+      <div class="profile-dropdown">
+        <p class="dropdown-item">{{email}}</p>
+        <p class="dropdown-item">{{role}}</p>
+        <a class="dropdown-item" (click)="logout()">Logout</a>
+      </div>
     </div>
   </div>
-</div>
 
 </nav>

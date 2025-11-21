@@ -14,9 +14,9 @@ export class OpaqueService {
     this.client = new Client('http://localhost:3000'); // backend URL
   }
 
-  async register(username: string, email: string, password: string, role: any) {
+  async register(username: string, name: string, surname: string, email: string, password: string, role: any) {
     try {
-      const response = await this.client.register(username, email, password, role);
+      const response = await this.client.register(username, name, surname, email, password, role);
       return response;
     } catch (err) {
       console.error('Registration error:', err);

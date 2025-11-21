@@ -8,8 +8,8 @@
     <table class="custom-table full">
       <thead>
         <tr>
+          <th>Title</th>
           <th>Date</th>
-          <th>Pet</th>
           <th>Description</th>
           <th style="width: 160px;">Actions</th>
         </tr>
@@ -21,8 +21,8 @@
 
         @for (r of reminders; track r) {
         <tr>
+          <td>{{ r.title }}</td>
           <td>{{ r.date }}</td>
-          <td>{{ r.pet }}</td>
           <td>{{ r.description }}</td>
           <td class="actions">
             <img src="../../../assets/icons/delete.svg" alt="delete" class="edit-icon" (click)="deleteReminder(r.id)"/>
