@@ -85,9 +85,11 @@ const listAppointments = async (client: any) => {
   const user = await login_or_register("appointment_user", "1@1", "1234", "user");
   const doctor = await login_or_register("appointment_doctor", "1@2", "1234", "doctor");
   
-  const doctor_id = (await listDoctors(doctor))[0].id;
+  const doctor_id = (await listDoctors(user))[0].id;
   
   const appointment = await addAppointment(user, doctor_id, new Date().toISOString());
+
+  await listDoctors(user)
   
   const appointment_id = appointment.appointment_id;
   
@@ -95,5 +97,4 @@ const listAppointments = async (client: any) => {
   await getAppointmentDetail(user, appointment_id);
   await deleteAppointment(user, appointment_id);
   await listAppointments(user);
-  
 })()
