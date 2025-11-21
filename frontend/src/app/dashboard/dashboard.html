@@ -1,99 +1,148 @@
 <div class="dashboard-container">
+   @if (role == 'doctor') {
 
-  <!-- REMINDERS CARD -->
-  <div class="card">
-    <div class="card-header">
-      <h3>
-        <img src="../../assets/icons/reminders.svg" alt="edit" class="edit-icon" />
-        Upcoming Reminders
-      </h3>
 
-      <a class="view-link" routerLink="/reminders">View All</a>
+    <!-- STATS (LEFT) -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <img src="../../assets/icons/calendar.svg" class="stat-icon" />
+        <div class="stat-info">
+          <h2>{{ totalAppointments }}</h2>
+          <p>Upcoming Appointments</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <img src="../../assets/icons/reminders.svg" class="stat-icon" />
+        <div class="stat-info">
+          <h2>{{ reminders.length }}</h2>
+          <p>Pending Reminders</p>
+        </div>
+      </div>
     </div>
 
-    <div class="table-wrapper">
-      <table class="custom-table">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Pet</th>
-            <th>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let r of reminders">
-            <td>{{ r.date }}</td>
-            <td>{{ r.pet }}</td>
-            <td>{{ r.description }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+    <!-- TODAY'S SCHEDULE (RIGHT) -->
+    <div class="card schedule-card">
+      <div class="card-header">
+        <h3>
+          <img src="../../assets/icons/today.svg" class="edit-icon" />
+          Today’s Schedule
+        </h3>
+      </div>
 
-  <!-- APPOINTMENTS CARD -->
-  <div class="card">
-    <div class="card-header">
-      <h3>
-        <img src="../../assets/icons/calendar.svg" alt="edit" class="edit-icon" />
-        Upcoming Appointments
-      </h3>
+      @if (todaysAppointments.length > 0) {
+      <ul class="schedule-list">
+        @for (appt of todaysAppointments; track appt) {
+        <li>
+          <strong>{{ appt.time }}</strong> —
+          {{ appt.petName }} ({{ appt.petType }}) —
+          {{ getDoctorName(appt.doctor_id) }}
+        </li>
+        }
+      </ul>
+      } @else {
+      <p class="no-data">No scheduled appointments for today.</p>
+      }
 
-      <a class="view-link" routerLink="/appointments">View All</a>
     </div>
 
-    <div class="table-wrapper">
-      <table class="custom-table">
-        <thead>
-          <tr>
-            <th>Doctor</th>
-            <th>Date</th>
-            <th>Time</th>
-          </tr>
-        </thead>
-        <tbody>
-          @if (appointments.length > 0) {
-          @for (a of appointments; track a) {
+
+  }
+</div>
+
+<div class="dashboard-container">
+
+    <!-- REMINDERS -->
+    <div class="card">
+      <div class="card-header">
+        <h3>
+          <img src="../../assets/icons/reminders.svg" alt="edit" class="edit-icon" />
+          Reminders
+        </h3>
+        <a class="view-link" routerLink="/reminders">View All</a>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Date</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let r of reminders">
+              <td>{{ r.title }}</td>
+              <td>{{ r.date }}</td>
+              <td>{{ r.description }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- APPOINTMENTS -->
+    <div class="card">
+      <div class="card-header">
+        <h3>
+          <img src="../../assets/icons/calendar.svg" alt="edit" class="edit-icon" />
+          Upcoming Appointments
+        </h3>
+        <a class="view-link" routerLink="/appointments">View All</a>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th>Doctor</th>
+              <th>Date</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            @if (appointments.length > 0) {
+            @for (a of appointments; track a) {
             <tr>
               <td>{{ getDoctorName(a.doctor_id) }}</td>
               <td>{{ a.date }}</td>
               <td>{{ a.time }}</td>
             </tr>
-          }
-        } @else {
-          <tr>
-            <td colspan="4" class="no-data">
-              No appointments found
-            </td>
-          </tr>
-        }
-        </tbody>
-      </table>
+            }
+            } @else {
+            <tr>
+              <td colspan="4" class="no-data">No appointments found</td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
-
-
-
 
 </div>
 
+
+@if (role == 'user') {
+
 <div class="pets-section">
 
-  <h3 class="section-title"> <img src="../../assets/icons/pet-icon.svg" alt="edit" class="edit-icon" /> YOUR PETS</h3>
+  <h3 class="section-title">
+    <img src="../../assets/icons/pet-icon.svg" alt="edit" class="edit-icon" /> YOUR PETS
+  </h3>
 
   <div class="carousel-container">
 
+    <!-- LEFT ARROW (only show if more pets than visible space) -->
     <!-- <button class="arrow-btn left" (click)="prevSlide()">
-      ◀
+      <img src="../../assets/icons/left-arrow.svg" class="edit-icon" />
     </button> -->
 
-    <!-- Slider -->
-    @if(role == 'user'){
     <div class="carousel-window">
-      <div class="carousel-track">
+      <div class="carousel-track" [style.transform]="'translateX(' + currentOffset + 'px)'">
 
         <div class="pet-card" *ngFor="let p of pets">
-          <img [src]="p.imageUrl || '../../assets/images/dog.jpg'" class="pet-image">
+          <img [src]="p.imageUrl || '../../assets/images/dog.jpg'" class="pet-image" />
 
           <div class="pet-info">
             <h4 class="pet-name">{{ p.name }}</h4>
@@ -107,13 +156,11 @@
             <button class="circle-btn" (click)="getPetDetails(p.id)">
               <img src="assets/icons/info.svg" class="edit-icon" />
             </button>
-
             <button class="circle-btn">
               <img src="assets/icons/calendar.svg" class="edit-icon" />
             </button>
           </div>
         </div>
-
 
         <!-- ADD NEW PET CARD -->
         <div class="pet-card add-pet-card">
@@ -127,11 +174,16 @@
             <img src="assets/icons/add.svg" class="edit-icon" />
           </button>
         </div>
+
       </div>
     </div>
 
+    <!-- RIGHT ARROW -->
     <!-- <button class="arrow-btn right" (click)="nextSlide()">
-      ▶
+      <img src="../../assets/icons/right-arrow.svg" class="edit-icon" />
     </button> -->
 
-    }
+  </div>
+</div>
+
+}

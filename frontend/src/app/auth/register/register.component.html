@@ -4,6 +4,26 @@
     <p class="subtitle">Start your journey in making a difference in pets' lives.</p>
 
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+      <!-- Name Field -->
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input id="name" type="text" formControlName="name" placeholder="Enter your name" />
+        @if (submitted && registerForm.get('name')?.invalid) {
+          <div class="error">Name is required</div>
+        }
+      </div>
+
+      <!-- Surname Field -->
+      <div class="form-group">
+        <label for="surname">Surname</label>
+        <input id="surname" type="text" formControlName="surname" placeholder="Enter your surname" />
+        @if (submitted && registerForm.get('surname')?.invalid) {
+          <div class="error">Surname is required</div>
+        }
+      </div>
+
+      <!-- Username Field -->
       <div class="form-group">
         <label for="username">Username</label>
         <input id="username" type="text" formControlName="username" placeholder="Enter username" />
@@ -12,6 +32,7 @@
         }
       </div>
 
+      <!-- Email Field -->
       <div class="form-group">
         <label for="email">Email</label>
         <input id="email" type="email" formControlName="email" placeholder="Enter email" />
@@ -20,10 +41,10 @@
         }
       </div>
 
+      <!-- Password Field -->
       <div class="form-group">
         <label for="password">Password</label>
         <input id="password" type="password" formControlName="password" placeholder="Enter password" />
-
         @if (submitted && registerForm.get('password')?.errors) {
           <div class="error">
             @if (registerForm.get('password')?.errors?.['required']) {
@@ -34,8 +55,7 @@
             }
             @if (registerForm.get('password')?.errors?.['pattern']) {
               <p>Password must include at least one uppercase letter,
-                one lowercase letter,
-              one number, and one special character</p>
+                 one lowercase letter, one number, and one special character</p>
             }
           </div>
         }
@@ -55,12 +75,5 @@
       <a class="link" href="login">Login</a>
     </p>
 
-    @if (registrationSuccess) {
-      <div class="success">Registration successful!</div>
-    }
-
-    @if (registrationError) {
-      <div class="error">Registration failed: {{ registrationError }}</div>
-    }
   </div>
 </div>

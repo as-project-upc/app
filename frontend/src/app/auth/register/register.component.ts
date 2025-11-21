@@ -37,6 +37,8 @@ export class RegisterComponent implements OnInit {
 
 
     this.registerForm = this.formBuilder.group({
+      name: ['', Validators.required],
+      surname: ['', Validators.required],
       username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: [
@@ -82,11 +84,15 @@ export class RegisterComponent implements OnInit {
     }
 
     const username = this.registerForm.get('username')?.value;
+    const name = this.registerForm.get('name')?.value;
+    const surname = this.registerForm.get('surname')?.value;
     const email = this.registerForm.get('email')?.value;
     const password = this.registerForm.get('password')?.value;
     try {
       const regRes =  this.opaqueService.register(
         username,
+        name,
+        surname,
         email,
         password,
         this.selectedRole

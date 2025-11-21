@@ -26,16 +26,24 @@ export class Dashboard {
   ) { }
   reminders: any = [];
   appointments: any = [];
+  todaysAppointments: any = [];
+  totalAppointments: any = [];
   doctors: any = [];
   pets: any = [];
   lockerData: any;
   role: any;
+  currentOffset = 0;
+
 
   ngOnInit() {
     this.role = this.authService.role;
-    this.getAllPets();
-    this.getAllDoctors();
+    if(this.role == 'user'){
+      this.getAllPets();
+      this.getAllDoctors();
+    }
     this.getAllAppointments();
+    this.getTodaysAppointments()
+    this.getTotalAppointments()
     this.getAllReminders();
   }
 
@@ -71,6 +79,22 @@ export class Dashboard {
     });
   }
 
+  getTodaysAppointments() {
+    const today = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
+
+    this.todaysAppointments = this.appointments.filter((a: any) =>
+      a.date === today
+    );
+  }
+
+    getTotalAppointments() {
+      const today = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
+
+      this.totalAppointments = this.appointments.filter((a: any) =>
+        a.date >= today
+      ).length;
+    }
+
   getAllDoctors() {
     this.appointmentService.listDoctors().subscribe({
       next: (data) => {
@@ -97,7 +121,7 @@ export class Dashboard {
             .map((a: any) => ({
               id: a.id,
               date: a.date,
-              pet: a.pet,
+              title: a.title,
               description: a.description,
             }))
             // Sort newest first by date

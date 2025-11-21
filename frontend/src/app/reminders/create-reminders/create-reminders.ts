@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AngularMaterialModule } from '../../ang-material.module';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LockerService } from '../../shared/services/locker.service';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -21,8 +21,8 @@ export class CreateReminders {
 
   ngOnInit() {
     this.reminderForm = this.fb.group({
-      pet: [''],
-      date: [''],
+      title: ['', Validators.required],
+      date: ['', Validators.required],
       description: ['']
     });
   }
@@ -55,7 +55,7 @@ export class CreateReminders {
   const reminderJson = {
     id: uuidv4(),
     date: formData.date,
-    pet: formData.pet,
+    title: formData.title,
     description: formData.description || ''
   };
 

@@ -4,9 +4,11 @@
       <img src="../../assets/icons/pet-icon.svg" alt="edit" class="edit-icon" /> GuardPaw
     </div>
 
-    <p routerLink="/doctors" routerLinkActive="active" class="gp-nav-link">
-    Doctors
-  </p>
+    @if(role =='user'){
+      <p routerLink="/doctors" routerLinkActive="active" class="gp-nav-link">
+        Doctors
+      </p>
+    }
 
   <p routerLink="/appointments" routerLinkActive="active" class="gp-nav-link">
     Appointments

@@ -41,7 +41,7 @@ export class ListReminders {
           this.reminders = this.lockerData.reminders.map((a: any) => ({
             id: a.id,
             date: a.date,
-            pet: a.pet,
+            title: a.title,
             description: a.description,
           }));
 
