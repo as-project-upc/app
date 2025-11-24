@@ -1,74 +1,27 @@
-<div class="chat-container">
-
-  <!-- Sidebar -->
-  <div class="sidebar">
-
-    <div class="sidebar-header">Chats</div>
-
-    <!-- SEARCH -->
-    <div class="search-wrapper">
-      <input
-        matInput
-        placeholder="Search"
-        [(ngModel)]="searchText"
-        class="search-box"
-      />
-    </div>
-
-    <!-- USER LIST -->
-    <div class="user-list">
-      <div
-        class="user-item"
-        *ngFor="let user of filteredUsers"
-        (click)="selectUser(user)"
-        [class.active]="selectedUser?.id === user.id"
-      >
-        <img class="avatar" src="../../assets/icons/profile-circle.svg" />
-        <div class="user-info">
-          <div class="name">{{ user.name }}</div>
-          <div class="last-msg">{{ user.lastMessage }}</div>
-        </div>
+<div class="chat-container" *ngIf="selectedUser">
+  <div class="chat-header">
+    <img class="avatar" src="../../assets/icons/profile-circle.svg" />
+    <div class="header-user-info">
+      <div class="user-name">User</div>
+      <div class="status-indicator" [class.online]="isOnline" [class.offline]="!isOnline">
+        {{ isOnline ? 'online' : 'offline' }}
       </div>
     </div>
-
   </div>
 
-  <!-- CHAT WINDOW -->
-  <div class="chat-window" *ngIf="selectedUser">
-
-    <div class="chat-header">
-      <img class="avatar" src="../../assets/icons/profile-circle.svg" />
-      <span>{{ selectedUser.name }}</span>
-    </div>
-
-    <!-- SCROLLABLE MESSAGES -->
-    <div id="msgContainer" class="chat-messages">
-      <div
-        *ngFor="let msg of messages"
-        class="message"
-        [class.me]="msg.fromMe"
-      >
-        <div class="bubble">{{ msg.text }}</div>
-        <div class="time">{{ msg.time }}</div>
-      </div>
-    </div>
-
-    <!-- FIXED INPUT BAR -->
-    <div class="chat-input">
-      <input
-        placeholder="Type a message..."
-        [(ngModel)]="messageText"
-        (keyup.enter)="sendMessage()"
-      />
-      <button mat-icon-button color="primary" (click)="sendMessage()">
-        <mat-icon>send</mat-icon>
-      </button>
+  <div #msgContainer class="chat-messages">
+    <div *ngFor="let msg of messages" class="message" [class.me]="msg.fromMe">
+      <div class="bubble">{{ msg.text }}</div>
+      <div class="time">{{ msg.time }}</div>
     </div>
   </div>
 
-  <!-- NO CHAT SELECTED -->
-  <div class="no-chat" *ngIf="!selectedUser">
-    Select a user to start chatting
+  <div class="chat-input">
+    <input placeholder="Type a message..." [(ngModel)]="messageText" (keyup.enter)="sendMessage()" />
+    <button mat-icon-button color="primary" (click)="sendMessage()">
+      <mat-icon>send</mat-icon>
+    </button>
   </div>
-
 </div>
+
+<div *ngIf="!selectedUser" class="no-chat">Waiting for messages...</div>

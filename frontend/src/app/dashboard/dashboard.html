@@ -38,7 +38,7 @@
         <img src="../../assets/icons/calendar.svg" class="stat-icon" />
         <div class="stat-info">
           <h2>{{ totalAppointments }}</h2>
-          <p>Upcoming Appointments</p>
+              <p>Upcoming Appointments</p>
         </div>
       </div>
 
@@ -80,8 +80,8 @@
           <div class="day-label">Sat</div>
           <div class="day-label">Sun</div>
 
-          <div class="calendar-day" *ngFor="let day of calendarDays" [class.has-appointment]="day.hasAppointment">
-            <span>{{ day.date }}</span>
+          <div class="calendar-day" *ngFor="let day of calendarDays" [class.has-appointment]="day.hasAppointment" (click)="getTotalAppointments(day.date)">
+            <span >{{ day.date }}</span>
             <div *ngIf="day.hasAppointment" class="dot"></div>
           </div>
 
