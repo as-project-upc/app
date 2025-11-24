@@ -36,6 +36,12 @@ export class Doctors {
     this.router.navigate(['/appointments'], {
     queryParams: { doctor: doctorId }
   });
-}
+  }
+
+  openChat(doctorId: any) {
+      this.router.navigate(['/chat'], {
+      queryParams: { doctor: doctorId }
+    });
+  }
 
 }
