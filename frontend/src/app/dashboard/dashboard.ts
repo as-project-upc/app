@@ -28,6 +28,7 @@ export class Dashboard {
   appointments: any = [];
   todaysAppointments: any = [];
   totalAppointments: any = [];
+  selectedDate : any;
   doctors: any = [];
   pets: any = [];
   lockerData: any;
@@ -88,7 +89,7 @@ export class Dashboard {
     }
     this.generateCalendar();
     this.getTodaysAppointments()
-    this.getTotalAppointments()
+    this.getTotalAppointments(new Date().getDate());
   }
 
   generateCalendar() {
@@ -112,10 +113,10 @@ export class Dashboard {
     }
 
     for (let d = 1; d <= daysInMonth; d++) {
-      const dateStr = new Date(year, month, d).toISOString().slice(0, 10);
+      const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
 
       const hasAppointment = this.appointments.some((a: any) =>
-        a.date.startsWith(dateStr)
+        a.date.slice(0, 10) === dateStr
       );
 
       days.push({
@@ -154,12 +155,23 @@ export class Dashboard {
     );
   }
 
-  getTotalAppointments() {
-    const today = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
+  getTotalAppointments(dayNumber: number) {
+    const year = this.currentYear
+    const month = String(this.currentDate.getMonth() + 1).padStart(2, "0");
+    const day = String(dayNumber).padStart(2, "0");
+
+    const selectedDate = `${year}-${month}-${day}`;
+    this.selectedDate = selectedDate;
+
     this.totalAppointments = this.appointments.filter((a: any) =>
-      a.date >= today
+      a.date.slice(0, 10) === selectedDate
     ).length;
+
   }
+
+
+
+
 
   getAllDoctors() {
     this.appointmentService.listDoctors().subscribe({

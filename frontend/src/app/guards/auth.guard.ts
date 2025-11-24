@@ -20,7 +20,7 @@ export class AuthGuard implements CanActivate {
 
   canActivate(): boolean {
     const token = localStorage.getItem('authToken');
-    console.log('AuthGuard canActivate, authToken:', token);
+    // console.log('AuthGuard canActivate, authToken:', token);
 
     if (!token) {
       console.log('No token, redirecting to login...');
