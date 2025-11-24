@@ -18,10 +18,7 @@ pub fn validate_existing_path(claims: Claims, file_name: &str) -> Result<PathBuf
     }
 
     if !file_path.exists() {
-        return Err(ApiError::ValidationError {
-            field: "file".to_string(),
-            message: "File not found".to_string(),
-        });
+        return Err(ApiError::FileNotFound);
     }
 
     if !file_path.starts_with(&storage_dir) {

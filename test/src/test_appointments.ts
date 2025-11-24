@@ -1,10 +1,11 @@
 import {login_or_register} from "./login_register";
+import {BASE_API_URL} from "./env";
 
 
 const listDoctors = async (client: any) => {
   console.log("add appointment endpoint")
   
-  const res = await fetch("http://localhost:3000/api/doctors", {
+  const res = await fetch(`${BASE_API_URL}/api/doctors`, {
     headers: {
       Authorization: `Bearer ${client.token}`,
       'Content-Type': 'application/json',
@@ -18,7 +19,7 @@ const listDoctors = async (client: any) => {
 const addAppointment = async (client: any, doctor_id: string, datetime: string) => {
   console.log("add appointment endpoint")
   
-  const res = await fetch("http://localhost:3000/api/appointment", {
+  const res = await fetch(`${BASE_API_URL}/api/appointment`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${client.token}`,
@@ -39,7 +40,7 @@ const addAppointment = async (client: any, doctor_id: string, datetime: string) 
 const getAppointmentDetail = async (client: any, appointment_id: string) => {
   console.log("GET appointment detail endpoint")
   
-  const res = await fetch(`http://localhost:3000/api/appointment/${appointment_id}`, {
+  const res = await fetch(`${BASE_API_URL}/api/appointment/${appointment_id}`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${client.token}`,
@@ -54,7 +55,7 @@ const getAppointmentDetail = async (client: any, appointment_id: string) => {
 const deleteAppointment = async (client: any, appointment_id: string) => {
   console.log("delete appointment endpoint")
   
-  const res = await fetch(`http://localhost:3000/api/appointment/${appointment_id}`, {
+  const res = await fetch(`${BASE_API_URL}/api/appointment/${appointment_id}`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${client.token}`,
@@ -69,7 +70,7 @@ const deleteAppointment = async (client: any, appointment_id: string) => {
 const listAppointments = async (client: any) => {
   console.log("list appointment endpoint")
   
-  const res = await fetch("http://localhost:3000/api/appointment", {
+  const res = await fetch(`${BASE_API_URL}/api/appointment`, {
     headers: {
       Authorization: `Bearer ${client.token}`,
     }
@@ -88,7 +89,7 @@ const listAppointments = async (client: any) => {
   const doctor_id = (await listDoctors(user))[0].id;
   
   const appointment = await addAppointment(user, doctor_id, new Date().toISOString());
-
+  
   await listDoctors(user)
   
   const appointment_id = appointment.appointment_id;

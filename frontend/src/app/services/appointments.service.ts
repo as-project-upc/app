@@ -1,19 +1,19 @@
 // src/app/services/appointment.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AppointmentService {
-  private baseUrl = 'http://localhost:3000/api';
+  private baseUrl = environment.apiBaseUrl;
 
   constructor(private http: HttpClient) {}
 
-
   listDoctors(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/doctors`);
+    return this.http.get(`${this.baseUrl}/api/doctors`);
   }
 
   addAppointment(doctor_id: string, datetime: string): Observable<any> {
@@ -21,7 +21,7 @@ export class AppointmentService {
       doctor_id: doctor_id,
       date: datetime, // pass the datetime instead of always using now
     };
-    return this.http.post(`${this.baseUrl}/appointment`, body);
+    return this.http.post(`${this.baseUrl}/api/appointment`, body);
   }
 
   getAppointmentDetail(appointment_id: string): Observable<any> {
@@ -33,6 +33,6 @@ export class AppointmentService {
   }
 
   listAppointments(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/appointment`);
+    return this.http.get(`${this.baseUrl}/api/appointment`);
   }
 }

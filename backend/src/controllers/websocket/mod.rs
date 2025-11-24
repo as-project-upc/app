@@ -1,3 +1,3 @@
 mod websocket;
 
-pub use websocket::handler;
+pub use websocket::{handler, WsState};

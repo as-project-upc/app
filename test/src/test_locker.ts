@@ -1,5 +1,6 @@
 import {login_or_register} from "./login_register";
 import {Client} from "./opaque-client";
+import {BASE_API_URL} from "./env";
 
 
 async function main() {
@@ -29,7 +30,7 @@ const uploadEncryptedFile = async (client: Client, fileName: string, data: strin
   const formData = new FormData();
   formData.append('file', new Blob([encrypted]), fileName);
   
-  const res = await fetch(`http://localhost:3000/api/locker/${fileName}`, {
+  const res = await fetch(`${BASE_API_URL}/api/locker/${fileName}`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${client.token}`,
@@ -42,7 +43,7 @@ const uploadEncryptedFile = async (client: Client, fileName: string, data: strin
 
 const downloadEncryptedFile = async (client: Client, fileName: string) => {
   console.log("Download file")
-  const res = await fetch(`http://localhost:3000/api/locker/${fileName}`, {
+  const res = await fetch(`${BASE_API_URL}/api/locker/${fileName}`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${client.token}`,
@@ -59,7 +60,7 @@ const downloadEncryptedFile = async (client: Client, fileName: string) => {
 
 const deleteFile = async (client: Client, fileName: string) => {
   console.log("Delete file")
-  const res = await fetch(`http://localhost:3000/api/locker/${fileName}`, {
+  const res = await fetch(`${BASE_API_URL}/api/locker/${fileName}`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${client.token}`,
@@ -71,7 +72,7 @@ const deleteFile = async (client: Client, fileName: string) => {
 
 const listFiles = async (client: Client) => {
   console.log("List files")
-  const res = await fetch("http://localhost:3000/api/locker", {
+  const res = await fetch(`${BASE_API_URL}/api/locker`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${client.token}`,

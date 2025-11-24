@@ -13,7 +13,7 @@ async fn main() {
     dotenvy::dotenv().expect("Failed to read .env file");
 
     tracing_subscriber::fmt()
-        .with_max_level(tracing::Level::TRACE)
+        .with_max_level(tracing::Level::INFO)
         .with_target(false)
         .with_level(true)
         .with_line_number(true)
@@ -38,5 +38,5 @@ async fn main() {
         .await
         .expect("Failed to run migrations");
 
-    app::App::serve(pool).await;
+    app::App::serve(pool, false).await;
 }

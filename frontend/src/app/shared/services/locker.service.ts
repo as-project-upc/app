@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Client } from './opaque-client.service';
 import { OpaqueService } from '../../services/opaque.service';
+import { environment } from '../../../environments/environment.development';
 
 @Injectable({ providedIn: 'root' })
 export class LockerService {
   private client!: Client;
-  private baseUrl = 'http://localhost:3000';
+  private baseUrl = environment.apiBaseUrl;
 
   constructor(private authService: OpaqueService) {
     this.client = new Client(this.baseUrl);
@@ -19,14 +20,14 @@ export class LockerService {
     const bytes = new TextEncoder().encode(data);
     const encrypted = await this.client.encryptData(bytes);
 
-    console.log(this.client.token)
+    console.log(this.client.token);
     const formData = new FormData();
     formData.append('file', new Blob([encrypted]), fileName);
 
     const res = await fetch(`${this.baseUrl}/api/locker/${fileName}`, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${this.client.token}`
+        Authorization: `Bearer ${this.client.token}`,
       },
       body: formData,
     });
@@ -81,7 +82,7 @@ export class LockerService {
     const res = await fetch(`${this.baseUrl}/api/locker/${filename}`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${this.client.token}` },
-      body: formData
+      body: formData,
     });
 
     return res.json();
@@ -99,9 +100,8 @@ export class LockerService {
 
     const decrypted = await this.client.decryptData(encrypted);
 
-    return new Blob([decrypted], { type: "image/jpeg" });
+    return new Blob([decrypted], { type: 'image/jpeg' });
   }
-
 
   async uploadFile(file: File, filename: string) {
     if (!this.client) throw new Error('Client not initialized');
@@ -119,6 +119,4 @@ export class LockerService {
 
     return res.json();
   }
-
-
 }

@@ -1,8 +1,9 @@
 use crate::controllers;
+use crate::controllers::websocket::WsState;
 use crate::utils::opaque::OpaqueServer;
-use crate::utils::{auth_middleware, require_admin, require_user};
-use axum::http::header::AUTHORIZATION;
-use axum::http::HeaderValue;
+use crate::utils::{auth_middleware, require_admin};
+use axum::http::header::{AUTHORIZATION, CONTENT_TYPE};
+use axum::http::{HeaderValue, Method};
 use axum::routing::{any, delete, get, post};
 use axum::{middleware, Extension, Router};
 use axum_server::tls_rustls::RustlsConfig;
@@ -17,11 +18,13 @@ use tracing::Level;
 pub struct App {}
 
 impl App {
-    pub async fn serve(pool: sqlx::SqlitePool) {
+    pub async fn serve(pool: sqlx::SqlitePool, https_enabled: bool) {
         let opaque_server = OpaqueServer::new(pool.clone()).await;
+        let ws_state = WsState::new();
 
         let public_routes = Router::new()
             .route("/ws", any(controllers::websocket::handler))
+            .with_state(ws_state)
             .route(
                 "/register/start",
                 post(controllers::register::register_start_handler),
@@ -92,14 +95,20 @@ impl App {
             .nest("/api", api_routes)
             .fallback(controllers::static_files::handler)
             .layer(
-                CorsLayer::permissive()
+                CorsLayer::new()
                     .allow_origin(
                         std::env::var("FRONTEND_URL")
                             .expect("Failed to get FRONTEND_URL")
                             .parse::<HeaderValue>()
                             .expect("Failed to parse FRONTEND_URL as HeaderValue"),
                     )
-                    .allow_headers([AUTHORIZATION])
+                    .allow_methods(vec![
+                        Method::GET,
+                        Method::POST,
+                        Method::DELETE,
+                        Method::OPTIONS,
+                    ])
+                    .allow_headers([AUTHORIZATION, CONTENT_TYPE])
                     .allow_credentials(false),
             )
             .layer(
@@ -117,9 +126,11 @@ impl App {
                     .on_request(DefaultOnRequest::new().level(Level::TRACE)),
             )
             .with_state(pool.clone());
-
-        start_http(app).await;
-        // start_https(app).await;
+        if https_enabled {
+            start_https(app).await;
+        } else {
+            start_http(app).await;
+        }
     }
 }
 

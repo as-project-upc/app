@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Client } from '../shared/services/opaque-client.service';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root',
@@ -11,10 +12,17 @@ export class OpaqueService {
   private _role: string | null = null;
 
   constructor() {
-    this.client = new Client('http://localhost:3000'); // backend URL
+    this.client = new Client(environment.apiBaseUrl);
   }
 
-  async register(username: string, name: string, surname: string, email: string, password: string, role: any) {
+  async register(
+    username: string,
+    name: string,
+    surname: string,
+    email: string,
+    password: string,
+    role: any
+  ) {
     try {
       const response = await this.client.register(username, name, surname, email, password, role);
       return response;

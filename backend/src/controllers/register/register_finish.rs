@@ -32,7 +32,6 @@ pub async fn register_finish_handler(
             field: "username or email".to_string(),
         });
     }
-    dbg!(&request);
 
     if !request.email.contains('@') {
         return Err(ApiError::InvalidEmail);

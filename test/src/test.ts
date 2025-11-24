@@ -1,7 +1,8 @@
 import {Client} from './opaque-client';
+import {BASE_API_URL} from "./env";
 
 async function main() {
-  const client = new Client('http://localhost:3000');
+  const client = new Client(BASE_API_URL);
   
   const userNumber = 11321111;
   const username = `user_${userNumber}`;
@@ -35,7 +36,7 @@ async function main() {
   {
     console.log("me endpoint")
     
-    const res = await fetch("http://localhost:3000/api/me", {
+    const res = await fetch(`${BASE_API_URL}/api/me`, {
       headers: {
         Authorization: `Bearer ${token}`,
       }
@@ -49,7 +50,7 @@ async function main() {
   {
     console.log("admin endpoint")
     
-    const res = await fetch("http://localhost:3000/api/admin", {
+    const res = await fetch(`${BASE_API_URL}/api/admin`, {
       headers: {
         Authorization: `Bearer ${token}`,
       }
