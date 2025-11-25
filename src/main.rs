@@ -13,7 +13,7 @@ async fn main() {
     dotenvy::dotenv().expect("Failed to read .env file");
 
     tracing_subscriber::fmt()
-        .with_max_level(tracing::Level::INFO)
+        .with_env_filter(EnvFilter::from_default_env())
         .with_target(false)
         .with_level(true)
         .with_line_number(true)
