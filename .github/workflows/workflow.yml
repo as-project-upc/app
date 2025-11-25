@@ -21,4 +21,4 @@ jobs:
 
       - uses: svenstaro/upload-release-action@v2
         with:
-          file: target/linux/release/backend
+          file: target/release/backend
