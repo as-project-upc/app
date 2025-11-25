@@ -28,11 +28,7 @@ jobs:
           scp -i ~/.ssh/deploy_key target/release/backend $USER@$HOST:/home/$USER/app2
           
           ssh -i ~/.ssh/deploy_key $USER@$HOST "
-            sudo pkill -f app || true
-            sleep 2
-            mv /home/$USER/app2 /home/$USER/app
-            chmod +x /home/$USER/app
-            sudo sh -c '/home/github-actions/app > /home/github-actions/app.log 2> & 1 &'
+            sudo /home/$USER/start.sh
           "
         env:
           PRIVATE_KEY: ${{ secrets.SSH_KEY }}
