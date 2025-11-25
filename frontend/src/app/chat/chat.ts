@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { AngularMaterialModule } from '../ang-material.module';
 import { environment } from '../../environments/environment.development';
+import { OpaqueService } from '../services/opaque.service';
 
 @Component({
   selector: 'app-chat',
@@ -17,20 +18,25 @@ export class Chat implements OnInit, OnDestroy {
   messages: { text: string; fromMe: boolean; time: string }[] = [];
   messageText = '';
   isOnline = false;
+  onlineUsers: any;
+  filteredUsers: any = [];
+  searchUser: string = '';
+  username: any;
 
   private subs: Subscription[] = [];
   @ViewChild('msgContainer') msgContainer!: ElementRef;
 
   constructor(
     private chatService: ChatService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private authService: OpaqueService
   ) {}
 
   async ngOnInit() {
+    this.username = this.authService.username;
     const doctorId = this.route.snapshot.queryParamMap.get('doctor');
     if (doctorId) {
       this.selectedUser = { id: doctorId, name: doctorId };
-      console.log('Selected user set from query param:', this.selectedUser);
     }
     await this.chatService.init();
 
@@ -39,7 +45,7 @@ export class Chat implements OnInit, OnDestroy {
     );
 
     this.chatService.onlineUsers$.subscribe(async users => {
-      const a = await Promise.all(
+      this.onlineUsers = await Promise.all(
         users.map(async user => {
           const r = await fetch(`${environment.apiBaseUrl}/api/user/${user}`, {
             headers: {
@@ -49,17 +55,16 @@ export class Chat implements OnInit, OnDestroy {
           return await r.json();
         })
       );
-      console.log(a);
-      return a;
+      this.filteredUsers = this.onlineUsers.filter((u: any) => u.username !== this.username);
     });
 
     this.subs.push(
       this.chatService.messages$.subscribe((msg: ReceiveMessage) => {
         console.log('Incoming message:', msg);
 
-        // For doctor: auto-create selectedUser if not set
         if (!this.selectedUser) {
-          this.selectedUser = { id: msg.fromUserId, name: msg.fromUserId };
+          const user = this.filteredUsers.find((u: any) => u.id === msg.fromUserId);
+          this.selectedUser = { id: msg.fromUserId, name: user.name };
         }
 
         if (this.selectedUser.id === msg.fromUserId) {
@@ -80,6 +85,19 @@ export class Chat implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.subs.forEach(s => s.unsubscribe());
     this.chatService.close();
+  }
+
+  selectUser(user: any) {
+    this.selectedUser = user;
+  }
+
+  searchUsers() {
+    const term = this.searchUser.toLowerCase();
+
+    this.filteredUsers = this.onlineUsers.filter(
+      (user: any) =>
+        user.name.toLowerCase().includes(term) || user.lastMessage?.toLowerCase().includes(term)
+    );
   }
 
   sendMessage() {
