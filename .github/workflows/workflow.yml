@@ -10,7 +10,7 @@ jobs:
       - uses: actions/setup-node@v6
       - run: |
           npm ci
-          npm build
+          npm run build
         working-directory: frontend
       - run: |
           cargo build --release
