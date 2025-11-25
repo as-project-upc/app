@@ -69,7 +69,7 @@ async fn handle_socket(socket: WebSocket, who: SocketAddr, state: WsState) {
                         }
                         Err(err) => {
                             error!("{who}: Invalid token: {err:?}");
-                            continue;
+                            break;
                         }
                     },
                     Err(err) => {
