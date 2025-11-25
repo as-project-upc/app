@@ -17,11 +17,11 @@ jobs:
           cargo build --release
         working-directory: backend
       - run: |
-          tree -a backend/target/release
+          stat backend/target/release/backend
 
-#      - uses: svenstaro/upload-release-action@v2
-#        with:
-#          repo_token: ${{ secrets.GITHUB_TOKEN }}
-#          file: target/${{ matrix.target }}/release/${{ matrix.artifact_name }}
-#          asset_name: ${{ matrix.asset_name }}
-#          tag: ${{ github.ref }}
+      - uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: target/linux/release/backend
+          asset_name: backend
+          tag: ${{ github.ref }}
