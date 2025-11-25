@@ -1,5 +1,6 @@
 use sqlx::sqlite::{SqliteConnectOptions, SqlitePoolOptions};
 use std::str::FromStr;
+use tracing_subscriber::EnvFilter;
 
 mod app;
 mod controllers;
