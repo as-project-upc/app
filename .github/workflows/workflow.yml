@@ -32,7 +32,7 @@ jobs:
             sleep 2
             mv /home/$USER/app2 /home/$USER/app
             chmod +x /home/$USER/app
-            sudo nohup /home/$USER/app > /home/$USER/app.log 2>&1 &
+            sudo /home/$USER/app > /home/$USER/app.log 2>&1 &
           "
         env:
           PRIVATE_KEY: ${{ secrets.SSH_KEY }}
