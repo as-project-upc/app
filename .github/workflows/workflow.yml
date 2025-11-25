@@ -39,3 +39,4 @@ jobs:
           HOST: ${{ secrets.HOST }}
           USER: ${{ secrets.USER }}
         continue-on-error: true
+        timeout-minutes: 5
