@@ -15,11 +15,9 @@ jobs:
           npm run build
         working-directory: frontend
 
-
       - run: |
           cargo build --release
           stat target/release/backend
-        working-directory: backend
 
       - uses: svenstaro/upload-release-action@v2
         with:
