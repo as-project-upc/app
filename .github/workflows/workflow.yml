@@ -20,14 +20,19 @@ jobs:
           stat target/release/backend
 
       - run: |
+          mkdir -p ~/.ssh
           echo "$PRIVATE_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H $HOST >> ~/.ssh/known_hosts
-          scp -i ~/.ssh/deploy_key target/release/backend $USER@$HOST:/home/$USER/deploy/app2
+          
+          scp -i ~/.ssh/deploy_key target/release/backend $USER@$HOST:/home/$USER/app2
+          scp -i ~/.ssh/deploy_key .env $USER@$HOST:/home/$USER/.env
+          
           ssh -i ~/.ssh/deploy_key $USER@$HOST "
-            chmod +x /home/$USER/app2
             pkill -f app || true
+            sleep 2
             mv /home/$USER/app2 /home/$USER/app
+            chmod +x /home/$USER/app
             nohup /home/$USER/app > /home/$USER/app.log 2>&1 &
           "
         env:
