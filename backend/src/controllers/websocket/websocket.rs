@@ -7,7 +7,7 @@ use axum::{
 use crate::utils::jwt::validate_token;
 use crate::utils::Claims;
 use axum::extract::connect_info::ConnectInfo;
-use futures_util::stream::{SplitSink, StreamExt};
+use futures_util::stream::StreamExt;
 use futures_util::SinkExt;
 use log::{error, info};
 use serde::{Deserialize, Serialize};
@@ -15,9 +15,10 @@ use serde_json::json;
 use std::collections::HashMap;
 use std::net::SocketAddr;
 use std::sync::Arc;
+use tokio::sync::mpsc::Sender;
 use tokio::sync::RwLock;
 
-type SenderType = Arc<RwLock<SplitSink<WebSocket, Message>>>;
+type SenderType = Sender<Message>;
 type Connections = Arc<RwLock<HashMap<String, SenderType>>>;
 
 #[derive(Clone)]
@@ -43,8 +44,18 @@ pub async fn handler(
 }
 
 async fn handle_socket(socket: WebSocket, who: SocketAddr, state: WsState) {
-    let (sender, mut receiver) = socket.split();
-    let sender: SenderType = Arc::new(RwLock::new(sender));
+    let (mut sender, mut receiver) = socket.split();
+    let (tx, mut rx) = tokio::sync::mpsc::channel::<Message>(100);
+
+    tokio::task::spawn(async move {
+        while let Some(msg) = rx.recv().await {
+            if sender.send(msg).await.is_err() {
+                error!("{who}: Error sending message to client.");
+                break;
+            }
+        }
+    });
+
     let mut claims: Option<Claims> = None;
     while let Some(Ok(msg)) = receiver.next().await {
         match msg {
@@ -53,7 +64,7 @@ async fn handle_socket(socket: WebSocket, who: SocketAddr, state: WsState) {
                 match serde_json::from_str::<Payload>(bytes.as_str()) {
                     Ok(p) => match validate_token(&p.token) {
                         Ok(c) => {
-                            handle_message(c.clone(), p, &sender, &state).await;
+                            handle_message(c.clone(), p, &tx, &state).await;
                             claims = Some(c);
                         }
                         Err(err) => {
@@ -120,41 +131,53 @@ async fn handle_message(claims: Claims, payload: Payload, sender: &SenderType, s
                 .write()
                 .await
                 .insert(user_id.clone(), sender.clone());
-            send_online_users(sender, state).await;
+            send_online_users(state).await;
         }
         WebSocketMessage::UnsubscribeUser => {
             info!("User {user_id} unsubscribed from messages.");
             state.connections.write().await.remove(user_id);
-            send_online_users(sender, state).await;
+            send_online_users(state).await;
         }
         WebSocketMessage::GetOnlineUsers => {
-            send_online_users(sender, state).await;
+            send_online_users(state).await;
         }
     }
 }
 
-async fn send_online_users(sender: &SenderType, state: &WsState) {
-    send_message(
-        sender,
-        json!({
-            "action": "GetOnlineUsers",
-            "data": {
-                "users": state.connections.read().await.keys()
-                .cloned().collect::<Vec<_>>(),
-            },
-        }),
-    )
-    .await;
+async fn send_online_users(state: &WsState) {
+    let users = state
+        .connections
+        .read()
+        .await
+        .keys()
+        .cloned()
+        .collect::<Vec<_>>();
+
+    let senders = state
+        .connections
+        .read()
+        .await
+        .values()
+        .cloned()
+        .collect::<Vec<_>>();
+
+    for s in senders {
+        send_message(
+            &s,
+            json!({
+                "action": "GetOnlineUsers",
+                "data": {
+                    "users": users,
+                },
+            }),
+        )
+        .await;
+    }
 }
 
 async fn send_message(sender: &SenderType, data: serde_json::Value) {
     let msg_str = serde_json::to_string(&data).unwrap();
-    sender
-        .write()
-        .await
-        .send(Message::Text(msg_str.into()))
-        .await
-        .unwrap();
+    sender.send(Message::Text(msg_str.into())).await.unwrap();
 }
 
 #[derive(Debug, Serialize, Deserialize)]
