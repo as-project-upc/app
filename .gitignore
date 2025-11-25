@@ -273,7 +273,8 @@ dist
 .pnp.*
 
 */target
+/target
 */npm_modules
-/backend/auth.db
-/backend/opaque.bin
-/backend/storage
+auth.db
+opaque.bin
+storage

@@ -6,7 +6,7 @@ use rust_embed::RustEmbed;
 use std::path::PathBuf;
 
 #[derive(RustEmbed)]
-#[folder = "../frontend/dist/frontend/browser"]
+#[folder = "frontend/dist/frontend/browser"]
 struct Assets;
 
 pub async fn handler(uri: Uri) -> Response {
