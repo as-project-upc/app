@@ -170,9 +170,12 @@ async fn start_https(app: Router, port: u16) {
         }
     });
 
+    let pem = std::env::var("CERT_PEM").expect("PEM environment variable is missing");
+    let key = std::env::var("KEY_PEM").expect("KEY environment variable is missing");
+
     axum_server::bind_rustls(
         SocketAddr::from(([0, 0, 0, 0], port)),
-        RustlsConfig::from_pem_file("cert.pem", "key.pem")
+        RustlsConfig::from_pem_file(pem, key)
             .await
             .expect("Failed to load certificates"),
     )
