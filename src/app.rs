@@ -176,13 +176,9 @@ async fn shutdown_signal() {
             .expect("Failed to install Ctrl+C handler");
     };
 
-    #[cfg(not(unix))]
-    let terminate = std::future::pending::<()>();
-
     tokio::select! {
         _ = ctrl_c => {
             tracing::info!("Received Ctrl+C signal, initiating graceful shutdown...");
         }
-        _ = terminate => {},
     }
 }

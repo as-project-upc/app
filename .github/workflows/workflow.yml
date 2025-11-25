@@ -1,0 +1,36 @@
+name: workflow.yml
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+      - uses: actions/setup-node@v6
+      - uses: Swatinem/rust-cache@v2
+
+      - run: |
+          npm ci
+          npm run build
+        working-directory: frontend
+
+      - run: |
+          cargo build --release
+          stat target/release/backend
+
+      - run: |
+          echo "$PRIVATE_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H $HOST >> ~/.ssh/known_hosts
+          scp -i ~/.ssh/deploy_key target/release/backend $USER@$HOST:/home/$USER/deploy/app2
+          ssh -i ~/.ssh/deploy_key $USER@$HOST "
+            chmod +x /home/$USER/app2
+            pkill -f app || true
+            mv /home/$USER/app2 /home/$USER/app
+            nohup /home/$USER/app > /home/$USER/app.log 2>&1 &
+          "
+        env:
+          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          HOST: ${{ secrets.VM_HOST }}
+          USER: ${{ secrets.VM_USERNAME }}
