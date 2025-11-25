@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 export interface ReceiveMessage {
   fromUserId: string;
@@ -18,6 +18,9 @@ export class ChatService {
   private messageSubject = new Subject<ReceiveMessage>();
   public messages$ = this.messageSubject.asObservable();
 
+  private onlineUsers = new BehaviorSubject<string[]>([]);
+  public onlineUsers$ = this.onlineUsers.asObservable();
+
   private connectionStatusSubject = new BehaviorSubject<boolean>(false);
   public connectionStatus$ = this.connectionStatusSubject.asObservable();
 
@@ -33,25 +36,31 @@ export class ChatService {
         console.log('WS connected');
         this.connectionStatusSubject.next(true);
 
-        this.sendPayload({ action: "SubscribeUser" });
+        this.sendPayload({ action: 'SubscribeUser' });
+        this.sendPayload({ action: 'GetOnlineUsers' });
         resolve();
       };
 
-      this.ws.onmessage = (event) => {
+      this.ws.onmessage = event => {
         const payload = JSON.parse(event.data);
 
-        if (payload.action === "ReceiveMessage") {
+        if (payload.action === 'ReceiveMessage') {
           const data = payload.data;
 
           this.messageSubject.next({
             fromUserId: data.fromUserId,
             message: data.message,
-            timestamp: new Date(data.timestamp ?? Date.now())
+            timestamp: new Date(data.timestamp ?? Date.now()),
           });
+        }
+
+        if (payload.action === 'GetOnlineUsers') {
+          console.log('Online users:', payload.data);
+          this.onlineUsers.next(payload.data.users);
         }
       };
 
-      this.ws.onerror = (err) => {
+      this.ws.onerror = err => {
         console.error('WS error', err);
         this.connectionStatusSubject.next(false);
       };
@@ -75,10 +84,9 @@ export class ChatService {
 
   sendMessage(toUserId: string, message: string) {
     this.sendPayload({
-      action: "SendMessage",
-      data: { toUserId, message }
+      action: 'SendMessage',
+      data: { toUserId, message },
     });
-
   }
 
   close() {

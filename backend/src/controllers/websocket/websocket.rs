@@ -120,12 +120,31 @@ async fn handle_message(claims: Claims, payload: Payload, sender: &SenderType, s
                 .write()
                 .await
                 .insert(user_id.clone(), sender.clone());
+            send_online_users(sender, state).await;
         }
         WebSocketMessage::UnsubscribeUser => {
             info!("User {user_id} unsubscribed from messages.");
             state.connections.write().await.remove(user_id);
+            send_online_users(sender, state).await;
+        }
+        WebSocketMessage::GetOnlineUsers => {
+            send_online_users(sender, state).await;
         }
     }
+}
+
+async fn send_online_users(sender: &SenderType, state: &WsState) {
+    send_message(
+        sender,
+        json!({
+            "action": "GetOnlineUsers",
+            "data": {
+                "users": state.connections.read().await.keys()
+                .cloned().collect::<Vec<_>>(),
+            },
+        }),
+    )
+    .await;
 }
 
 async fn send_message(sender: &SenderType, data: serde_json::Value) {
@@ -143,6 +162,7 @@ enum WebSocketMessage {
     SendMessage,
     SubscribeUser,
     UnsubscribeUser,
+    GetOnlineUsers,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

@@ -45,6 +45,7 @@ impl App {
 
         let protected_routes = Router::new()
             .route("/me", get(controllers::me::handler))
+            .route("/user/{user_id}", get(controllers::user::handler))
             .route(
                 "/locker/{file_name}",
                 post(controllers::locker::upload_handler),

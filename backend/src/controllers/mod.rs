@@ -7,3 +7,4 @@ pub mod me;
 pub mod register;
 pub mod static_files;
 pub mod websocket;
+pub mod user;

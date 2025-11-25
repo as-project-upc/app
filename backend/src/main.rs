@@ -38,5 +38,5 @@ async fn main() {
         .await
         .expect("Failed to run migrations");
 
-    app::App::serve(pool, false).await;
+    app::App::serve(pool, true).await;
 }
