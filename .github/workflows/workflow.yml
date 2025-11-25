@@ -32,7 +32,7 @@ jobs:
             sleep 2
             mv /home/$USER/app2 /home/$USER/app
             chmod +x /home/$USER/app
-            sudo /home/$USER/app > /home/$USER/app.log 2>&1 &
+            sudo sh -c '/home/github-actions/app > /home/github-actions/app.log 2> & 1 &'
           "
         env:
           PRIVATE_KEY: ${{ secrets.SSH_KEY }}
