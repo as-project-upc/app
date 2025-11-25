@@ -18,7 +18,7 @@ use tracing::Level;
 pub struct App {}
 
 impl App {
-    pub async fn serve(pool: sqlx::SqlitePool, https_enabled: bool) {
+    pub async fn serve(pool: sqlx::SqlitePool) {
         let opaque_server = OpaqueServer::new(pool.clone()).await;
         let ws_state = WsState::new();
 
@@ -127,18 +127,31 @@ impl App {
                     .on_request(DefaultOnRequest::new().level(Level::TRACE)),
             )
             .with_state(pool.clone());
+
+        let port: u16 = std::env::var("PORT")
+            .unwrap_or_else(|_| "3000".to_string())
+            .parse()
+            .expect("PORT must be a number");
+
+        let https_enabled = std::env::var("HTTPS_ENABLED")
+            .unwrap_or_else(|_| "false".to_string())
+            .parse::<bool>()
+            .expect("HTTPS ENABLED must be a bool");
+
         if https_enabled {
-            start_https(app).await;
+            start_https(app, port).await;
         } else {
-            start_http(app).await;
+            start_http(app, port).await;
         }
     }
 }
 
-async fn start_http(app: Router) {
+async fn start_http(app: Router, port: u16) {
     tracing::info!("Server running on http://localhost:3000");
     axum::serve(
-        tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap(),
+        tokio::net::TcpListener::bind(format!("0.0.0.0:{port}"))
+            .await
+            .unwrap(),
         app.into_make_service_with_connect_info::<SocketAddr>(),
     )
     .with_graceful_shutdown(shutdown_signal())
@@ -146,7 +159,7 @@ async fn start_http(app: Router) {
     .unwrap();
 }
 
-async fn start_https(app: Router) {
+async fn start_https(app: Router, port: u16) {
     tracing::info!("Server running on https://localhost:3000");
     let handle = axum_server::Handle::new();
     tokio::spawn({
@@ -158,7 +171,7 @@ async fn start_https(app: Router) {
     });
 
     axum_server::bind_rustls(
-        SocketAddr::from(([0, 0, 0, 0], 3000)),
+        SocketAddr::from(([0, 0, 0, 0], port)),
         RustlsConfig::from_pem_file("cert.pem", "key.pem")
             .await
             .expect("Failed to load certificates"),
